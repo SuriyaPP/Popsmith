@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Popsmith – Artisan Popcorn & Gourmet Snacks</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+/* ── TOKENS ── */
+:root {
+  --p:          #C8390A;
+  --p-h:        #A82D08;
+  --p-soft:     rgba(200,57,10,0.08);
+  --s:          #F5A623;
+  --s-soft:     rgba(245,166,35,0.12);
+  --bg:         #FDFAF6;
+  --sur:        #FFFFFF;
+  --sur2:       #FFF6EC;
+  --bdr:        #EDE0D0;
+  --t1:         #2A1800;
+  --t2:         #6B4F35;
+  --t3:         #A07856;
+  --ok:         #22863A; --ok-bg:#E6F4EA;
+  --info:       #1565C0; --info-bg:#E3F0FF;
+  --warn:       #B45309; --warn-bg:#FEF3C7;
+  --err:        #B91C1C; --err-bg:#FEE2E2;
+  --sh-sm:      0 2px 8px rgba(200,57,10,.07);
+  --sh-md:      0 6px 24px rgba(200,57,10,.10);
+  --sh-lg:      0 16px 56px rgba(200,57,10,.13);
+  --r-sm:8px; --r-md:14px; --r-lg:22px; --r-xl:32px; --r-f:9999px;
+  --ease:       .28s cubic-bezier(.4,0,.2,1);
+  --fd:         'Playfair Display',Georgia,serif;
+  --fb:         'DM Sans',sans-serif;
+  --nav-h:      72px;
+  --dark-section: #2A1800;
+}
+[data-theme="dark"] {
+  --bg:#100800; --sur:#1C1006; --sur2:#261810; --bdr:#3A2415;
+  --t1:#F5E8D6; --t2:#C4956A; --t3:#8A6040;--dark-section: #1C1006;
+}
+
+/* ── RESET ── */
+*,::before,::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--fb);background:var(--bg);color:var(--t1);line-height:1.65;overflow-x:hidden}
+img{max-width:100%;display:block}
+a{text-decoration:none;color:inherit}
+ul{list-style:none}
+
+/* ── TYPE ── */
+h1,h2,h3,h4{font-family:var(--fd);line-height:1.15}
+h1{font-size:clamp(2.6rem,5.5vw,5rem);font-weight:900}
+h2{font-size:clamp(1.9rem,3.5vw,3rem);font-weight:700}
+h3{font-size:1.35rem;font-weight:700}
+p{color:var(--t2);font-size:1rem}
+
+/* ── BUTTONS ── */
+.btn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:0 28px;height:48px;border-radius:var(--r-f);
+  font-family:var(--fb);font-size:.9rem;font-weight:600;
+  cursor:pointer;border:none;transition:var(--ease);white-space:nowrap;
+  letter-spacing:.01em;
+}
+.btn-primary{background:var(--p);color:#fff}
+.btn-primary:hover{background:var(--p-h);transform:translateY(-2px);box-shadow:var(--sh-lg)}
+.btn-secondary{background:transparent;color:var(--p);border:2px solid var(--p)}
+.btn-secondary:hover{background:var(--p);color:#fff;transform:translateY(-2px)}
+.btn-sm{height:40px;padding:0 20px;font-size:.82rem}
+.btn-lg{height:54px;padding:0 36px;font-size:1rem}
+
+/* ── ICON BUTTON (header controls) ── */
+.icon-btn{
+  width:44px;height:44px;display:flex;align-items:center;justify-content:center;
+  background:var(--sur2);border:1.5px solid var(--bdr);border-radius:var(--r-sm);
+  cursor:pointer;transition:var(--ease);color:var(--t2);font-size:1rem;
+}
+.icon-btn:hover{border-color:var(--p);color:var(--p);background:var(--p-soft)}
+.icon-btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* ── PROMO STRIP ── */
+.promo{
+  background:var(--s);color:var(--t1);
+  text-align:center;padding:10px 24px;
+  font-size:.85rem;font-weight:600;letter-spacing:.01em;
+}
+.promo span{opacity:.5;margin:0 10px}
+
+/* ── HEADER ── */
+header{
+  position:fixed;top:0;left:0;right:0;z-index:900;
+  background:rgba(253,250,246,.92);backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--bdr);transition:var(--ease);
+}
+[data-theme="dark"] header{background:rgba(16,8,0,.92)}
+nav{
+  max-width:1280px;margin:0 auto;padding:0 24px;
+  height:var(--nav-h);display:flex;align-items:center;gap:32px;
+}
+
+/* LOGO */
+.logo{
+  display:flex;align-items:center;gap:10px;
+  font-family:var(--fd);font-size:1.45rem;font-weight:900;color:var(--p);
+  flex-shrink:0;
+}
+.logo-mark{
+  width:40px;height:40px;background:var(--p);border-radius:var(--r-sm);
+  display:flex;align-items:center;justify-content:center;
+}
+.logo-mark svg{width:22px;height:22px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* NAV LINKS */
+.nav-links{
+  display:flex;align-items:center;gap:2px;margin-left:auto;
+}
+.nav-links a{
+  padding:8px 14px;border-radius:var(--r-sm);
+  font-size:.88rem;font-weight:500;color:var(--t2);
+  transition:var(--ease);
+}
+.nav-links a:hover{color:var(--p);background:var(--p-soft)}
+.nav-links a.active{color:var(--p);font-weight:600}
+
+/* NAV ACTIONS */
+.nav-actions{display:flex;align-items:center;gap:10px;margin-left:16px}
+.cart-btn{
+  position:relative;width:44px;height:44px;display:flex;align-items:center;justify-content:center;
+  background:var(--sur2);border:1.5px solid var(--bdr);border-radius:var(--r-sm);
+  cursor:pointer;transition:var(--ease);color:var(--t2);
+}
+.cart-btn:hover{border-color:var(--p);color:var(--p)}
+.cart-btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round}
+.cart-count{
+  position:absolute;top:-6px;right:-6px;
+  width:18px;height:18px;background:var(--p);color:#fff;
+  border-radius:50%;font-size:.62rem;font-weight:800;
+  display:flex;align-items:center;justify-content:center;
+  border:2px solid var(--bg);
+}
+.nav-mobile-toggle{display:none;width:44px;height:44px;align-items:center;justify-content:center;cursor:pointer;background:var(--sur2);border:1.5px solid var(--bdr);border-radius:var(--r-sm);color:var(--t2)}
+.nav-mobile-toggle svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round}
+
+/* ── HERO ── */
+.hero{
+  min-height:100vh;padding:calc(var(--nav-h) + 40px) 24px 80px;
+  background:var(--bg);display:flex;align-items:center;
+  position:relative;overflow:hidden;
+}
+.hero-blob1{
+  position:absolute;top:-120px;right:-80px;
+  width:680px;height:680px;border-radius:50%;
+  background:radial-gradient(circle,rgba(245,166,35,.18) 0%,transparent 70%);
+  pointer-events:none;
+}
+.hero-blob2{
+  position:absolute;bottom:-100px;left:-100px;
+  width:520px;height:520px;border-radius:50%;
+  background:radial-gradient(circle,rgba(200,57,10,.07) 0%,transparent 70%);
+  pointer-events:none;
+}
+.hero-inner{
+  max-width:1280px;margin:0 auto;width:100%;
+  display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;
+  position:relative;z-index:1;
+}
+.hero-pill{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--sur2);border:1px solid var(--bdr);
+  color:var(--p);padding:6px 16px;border-radius:var(--r-f);
+  font-size:.8rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
+  margin-bottom:22px;
+}
+.hero-pill svg{width:14px;height:14px;stroke:var(--s);fill:none;stroke-width:2.5}
+.hero h1{color:var(--t1);margin-bottom:20px}
+.hero h1 em{color:var(--p);font-style:italic}
+.hero-sub{font-size:1.1rem;max-width:480px;margin-bottom:36px;line-height:1.75}
+.hero-ctas{display:flex;gap:14px;flex-wrap:wrap}
+.hero-stats{
+  display:flex;gap:32px;margin-top:44px;padding-top:28px;
+  border-top:1px solid var(--bdr);
+}
+.hero-stat-val{font-family:var(--fd);font-size:1.6rem;font-weight:900;color:var(--t1)}
+.hero-stat-lbl{font-size:.78rem;color:var(--t3);font-weight:500}
+
+/* HERO VISUAL */
+.hero-visual{position:relative}
+.hero-img-ring{
+  width:100%;aspect-ratio:1;max-width:480px;margin:0 auto;
+  background:var(--sur2);border-radius:48% 52% 44% 56% / 50% 42% 58% 50%;
+  border:2px solid var(--bdr);display:flex;align-items:center;justify-content:center;
+  box-shadow:var(--sh-lg);overflow:hidden;
+  animation:morphBlob 8s ease-in-out infinite;
+}
+.hero-img-ring img{width:85%;height:85%;object-fit:contain}
+.hero-float-card{
+  position:absolute;background:var(--sur);border:1px solid var(--bdr);
+  border-radius:var(--r-md);padding:10px 16px;box-shadow:var(--sh-md);
+  display:flex;align-items:center;gap:8px;
+}
+.hero-float-card .hfc-icon{font-size:1.3rem}
+.hero-float-card strong{display:block;font-size:.82rem;color:var(--t1)}
+.hero-float-card span{font-size:.72rem;color:var(--t3)}
+.hfc-a{top:12%;right:-16px;animation:float 3.2s ease-in-out infinite}
+.hfc-b{bottom:18%;left:-20px;animation:float 3.2s ease-in-out infinite .9s}
+.hfc-c{top:52%;right:-24px;animation:float 3.2s ease-in-out infinite 1.6s}
+
+/* ── SECTION COMMONS ── */
+section{padding:96px 24px}
+.container{max-width:1280px;margin:0 auto}
+.section-eyebrow{
+  display:inline-block;background:var(--sur2);color:var(--p);
+  padding:5px 14px;border-radius:var(--r-f);
+  font-size:.72rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
+  margin-bottom:14px;border:1px solid var(--bdr);
+}
+.section-head{max-width:640px;margin:0 auto 56px;text-align:center}
+.section-head h2{color:var(--t1);margin-bottom:12px}
+.section-head p{font-size:1.05rem}
+.center-lone{display:flex;justify-content:center;margin-top:44px}
+
+/* ── FLAVORS ── */
+.flavors{background:var(--bg)}
+.flavors-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:22px;
+}
+.flavor-card{
+  background:var(--sur);border:1.5px solid var(--bdr);
+  border-radius:var(--r-lg);overflow:hidden;
+  transition:var(--ease);cursor:pointer;
+}
+.flavor-card:hover{transform:translateY(-6px);box-shadow:var(--sh-lg);border-color:var(--s)}
+.fc-img{
+  height:170px;display:flex;align-items:center;justify-content:center;
+  background:var(--sur2);transition:var(--ease);overflow:hidden;
+}
+.fc-img img{width:90px;height:90px;object-fit:contain;transition:var(--ease)}
+.flavor-card:hover .fc-img img{transform:scale(1.1) rotate(4deg)}
+.fc-body{padding:18px}
+.fc-badge{
+  display:inline-block;padding:3px 10px;border-radius:var(--r-f);
+  font-size:.68rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;
+  margin-bottom:8px;
+}
+.badge-new{background:var(--ok-bg);color:var(--ok)}
+.badge-pop{background:var(--warn-bg);color:var(--warn)}
+.badge-sea{background:var(--info-bg);color:var(--info)}
+.badge-vgn{background:#E8F5E9;color:#2E7D32}
+.fc-body h3{font-size:1rem;color:var(--t1);margin-bottom:5px}
+.fc-body p{font-size:.83rem;margin-bottom:14px}
+.fc-foot{display:flex;justify-content:space-between;align-items:center}
+.fc-price{font-weight:800;font-size:1.1rem;color:var(--p);font-family:var(--fd)}
+.fc-add{
+  width:34px;height:34px;background:var(--p);border-radius:50%;border:none;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  color:#fff;transition:var(--ease);
+}
+.fc-add svg{width:16px;height:16px;stroke:#fff;fill:none;stroke-width:2.5;stroke-linecap:round}
+.fc-add:hover{background:var(--p-h);transform:scale(1.1)}
+
+/* ── SUBSCRIPTION ── */
+.subscription{
+  background:var(--dark-section);border-radius:var(--r-xl);margin:0 24px;
+  overflow:hidden;
+}
+.subscription .section-eyebrow{background:rgba(245,166,35,.15);color:var(--s);border-color:rgba(245,166,35,.25)}
+.subscription .section-head h2{color:#fff}
+.subscription .section-head p{color:rgba(255,255,255,.55)}
+.sub-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:20px;
+}
+.sub-card{
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);
+  border-radius:var(--r-lg);padding:30px 28px;text-align:center;
+  position:relative;overflow:hidden;transition:var(--ease);
+}
+.sub-card:not(.popular):hover{background:rgba(255,255,255,.10);transform:translateY(-4px)}
+.sub-card.popular{background:var(--p);border-color:var(--p)}
+.popular-ribbon{
+  position:absolute;top:18px;right:-30px;
+  background:var(--s);color:var(--t1);font-size:.6rem;font-weight:900;
+  letter-spacing:.08em;padding:4px 38px;transform:rotate(45deg);text-transform:uppercase;
+}
+.sub-icon{font-size:2.2rem;margin-bottom:14px}
+.sub-card h3{color:#fff;font-size:1.2rem;margin-bottom:6px}
+.sub-card>p{color:rgba(255,255,255,.5);font-size:.83rem;margin-bottom:18px}
+.sub-price{font-family:var(--fd);font-size:2.4rem;font-weight:900;color:#fff;margin-bottom:2px}
+.sub-price sub{font-size:.9rem;font-weight:400;opacity:.55}
+.sub-features{text-align:left;margin:18px 0 26px}
+.sub-features li{
+  color:rgba(255,255,255,.7);font-size:.85rem;padding:5px 0;
+  border-bottom:1px solid rgba(255,255,255,.07);
+  display:flex;align-items:center;gap:8px;
+}
+.sub-features li::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--s);flex-shrink:0}
+.sub-features li:last-child{border:none}
+.sub-card .btn{width:100%;justify-content:center}
+/* Popular card uses primary style visually white */
+.sub-card.popular .btn-primary{background:#fff;color:var(--p)}
+.sub-card.popular .btn-primary:hover{background:var(--s);color:var(--t1)}
+.sub-card:not(.popular) .btn-secondary{border-color:rgba(255,255,255,.35);color:#fff}
+.sub-card:not(.popular) .btn-secondary:hover{background:#fff;color:var(--t1)}
+
+/* ── GIFTS ── */
+.gifts{background:var(--sur2)}
+.gifts-grid{
+  display:grid;grid-template-columns:1.3fr 1fr 1fr;grid-template-rows:auto auto;gap:20px;
+}
+.gift-card{
+  background:var(--sur);border:1.5px solid var(--bdr);
+  border-radius:var(--r-lg);overflow:hidden;transition:var(--ease);
+}
+.gift-card:hover{transform:translateY(-4px);box-shadow:var(--sh-lg)}
+.gift-card.featured{grid-row:span 2}
+.gc-img{
+  background:var(--sur2);display:flex;align-items:center;
+  justify-content:center;overflow:hidden;
+}
+.gc-img img{object-fit:contain;transition:var(--ease)}
+.gift-card:hover .gc-img img{transform:scale(1.05)}
+.gift-card.featured .gc-img{height:300px}
+.gift-card.featured .gc-img img{height:200px;width:200px}
+.gift-card:not(.featured) .gc-img{height:148px}
+.gift-card:not(.featured) .gc-img img{height:90px;width:90px}
+.gc-body{padding:20px}
+.gc-body h3{font-size:1rem;color:var(--t1);margin-bottom:5px}
+.gc-body p{font-size:.83rem;margin-bottom:14px}
+.gc-foot{display:flex;justify-content:space-between;align-items:center}
+.gc-foot .price{font-family:var(--fd);font-weight:800;font-size:1.15rem;color:var(--p)}
+
+/* ── CATERING ── */
+.catering{background:var(--bg)}
+.catering-inner{
+  display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center;
+}
+.catering-visual{
+  background:var(--sur2);border-radius:var(--r-xl);
+  min-height:460px;display:flex;align-items:center;justify-content:center;
+  border:2px solid var(--bdr);position:relative;overflow:hidden;
+}
+.catering-visual img{width:340px;height:340px;object-fit:contain;position:relative;z-index:1}
+.catering-float{
+  position:absolute;bottom:24px;right:24px;
+  background:var(--p);color:#fff;padding:10px 18px;border-radius:var(--r-md);
+  font-weight:700;font-size:.85rem;z-index:2;
+}
+.cat-blob{
+  position:absolute;top:-60px;left:-60px;width:300px;height:300px;
+  background:radial-gradient(circle,rgba(245,166,35,.15) 0%,transparent 70%);
+  border-radius:50%;
+}
+.catering-content h2{color:var(--t1);margin-bottom:14px}
+.catering-list{margin:24px 0 32px}
+.catering-list li{
+  display:flex;gap:14px;align-items:flex-start;
+  padding:14px 0;border-bottom:1px solid var(--bdr);
+}
+.catering-list li:last-child{border:none}
+.cat-icon{
+  width:40px;height:40px;min-width:40px;background:var(--sur2);
+  border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;
+}
+.cat-icon svg{width:18px;height:18px;stroke:var(--p);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.catering-list li strong{display:block;color:var(--t1);font-size:.9rem;margin-bottom:2px}
+.catering-list li span{font-size:.83rem;color:var(--t3)}
+
+/* ── STORE LOCATOR ── */
+.locator{background:var(--sur2)}
+.locator-inner{
+  display:grid;grid-template-columns:1fr 1.6fr;gap:36px;align-items:start;
+}
+.search-wrap{
+  display:flex;gap:0;border:2px solid var(--bdr);border-radius:var(--r-md);
+  overflow:hidden;background:var(--sur);margin-bottom:22px;
+}
+.search-wrap input{
+  flex:1;padding:13px 16px;border:none;outline:none;
+  font-family:var(--fb);font-size:.9rem;color:var(--t1);background:transparent;
+}
+.search-wrap button{
+  padding:12px 20px;background:var(--p);color:#fff;border:none;
+  cursor:pointer;font-family:var(--fb);font-weight:600;font-size:.85rem;
+  transition:var(--ease);
+}
+.search-wrap button:hover{background:var(--p-h)}
+.store-list{display:flex;flex-direction:column;gap:10px}
+.store-item{
+  background:var(--sur);border:1.5px solid var(--bdr);
+  border-radius:var(--r-md);padding:14px 16px;
+  display:flex;align-items:center;gap:12px;
+  cursor:pointer;transition:var(--ease);
+}
+.store-item:hover,.store-item.active{border-color:var(--p);box-shadow:var(--sh-sm)}
+.store-dot{width:9px;height:9px;border-radius:50%;background:var(--p);flex-shrink:0}
+.store-item strong{display:block;font-size:.85rem;color:var(--t1)}
+.store-item span{font-size:.78rem;color:var(--t3)}
+.store-km{margin-left:auto;font-size:.78rem;color:var(--p);font-weight:700;white-space:nowrap}
+.map-placeholder{
+  background:var(--sur2);border-radius:var(--r-xl);height:480px;
+  border:2px solid var(--bdr);display:flex;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;
+}
+.map-grid{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(var(--bdr) 1px,transparent 1px),
+    linear-gradient(90deg,var(--bdr) 1px,transparent 1px);
+  background-size:40px 40px;opacity:.5;
+}
+.map-road-h{position:absolute;height:3px;left:0;right:0;background:var(--bdr)}
+.map-road-v{position:absolute;width:3px;top:0;bottom:0;background:var(--bdr)}
+.map-pin-dot{
+  position:absolute;width:16px;height:16px;border-radius:50%;
+  background:var(--p);border:3px solid var(--sur);box-shadow:var(--sh-md);
+  cursor:pointer;transition:var(--ease);
+}
+.map-pin-dot:hover{transform:scale(1.4)}
+.map-label{position:absolute;text-align:center;font-size:.78rem;font-weight:700;color:var(--p)}
+
+/* ── TESTIMONIALS ── */
+.testimonials{background:var(--bg)}
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.testi-card{
+  background:var(--sur);border:1.5px solid var(--bdr);
+  border-radius:var(--r-lg);padding:26px;transition:var(--ease);
+}
+.testi-card:hover{box-shadow:var(--sh-md);border-color:var(--s)}
+.stars{color:var(--s);font-size:.9rem;margin-bottom:12px;letter-spacing:1px}
+.testi-card blockquote{
+  font-size:.9rem;color:var(--t2);line-height:1.75;
+  margin-bottom:18px;font-style:italic;
+}
+.testi-author{display:flex;align-items:center;gap:10px}
+.t-avatar{
+  width:40px;height:40px;border-radius:50%;
+  background:var(--sur2);border:2px solid var(--bdr);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.85rem;font-weight:700;color:var(--p);
+  font-family:var(--fd);flex-shrink:0;
+}
+.t-name{font-size:.85rem;font-weight:600;color:var(--t1)}
+.t-loc{font-size:.75rem;color:var(--t3)}
+
+/* ── FOOTER ── */
+footer{background:var(--dark-section);color:rgba(255,255,255,.75);padding:64px 24px 32px}
+.footer-inner{
+  max-width:1280px;margin:0 auto;
+  display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:44px;
+  margin-bottom:44px;
+}
+.footer-brand-logo{
+  display:flex;align-items:center;gap:10px;margin-bottom:14px;
+}
+.footer-logo-mark{
+  width:36px;height:36px;background:var(--p);border-radius:var(--r-sm);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.footer-logo-mark svg{width:18px;height:18px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round}
+.footer-brand-logo span{font-family:var(--fd);font-size:1.3rem;font-weight:900;color:#fff}
+.footer-brand p{color:rgba(255,255,255,.42);font-size:.85rem;line-height:1.7}
+.footer-social{display:flex;gap:8px;margin-top:18px}
+.fsoc{
+  width:34px;height:34px;background:rgba(255,255,255,.08);border-radius:var(--r-sm);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;transition:var(--ease);
+  color:rgba(255,255,255,.6);
+}
+.fsoc:hover{background:var(--p);color:#fff}
+.fsoc svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.footer-col h4{
+  font-family:var(--fb);font-size:.72rem;font-weight:800;text-transform:uppercase;
+  letter-spacing:.1em;color:rgba(255,255,255,.3);margin-bottom:14px;
+}
+.footer-col ul li{margin-bottom:8px}
+.footer-col ul li a{color:rgba(255,255,255,.55);font-size:.85rem;transition:var(--ease)}
+.footer-col ul li a:hover{color:var(--s)}
+.footer-bottom{
+  max-width:1280px;margin:0 auto;
+  border-top:1px solid rgba(255,255,255,.08);padding-top:24px;
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;
+}
+.footer-bottom p{color:rgba(255,255,255,.28);font-size:.8rem;margin:0}
+
+/* ── ANIMATIONS ── */
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes morphBlob{
+  0%,100%{border-radius:48% 52% 44% 56% / 50% 42% 58% 50%}
+  33%{border-radius:56% 44% 52% 48% / 44% 56% 44% 56%}
+  66%{border-radius:42% 58% 56% 44% / 56% 44% 52% 48%}
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+.fade-up{opacity:0;transform:translateY(28px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
+.fade-up.in{opacity:1;transform:translateY(0)}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1100px){
+  .flavors-grid{grid-template-columns:repeat(2,1fr)}
+  .sub-grid{grid-template-columns:1fr;max-width:400px;margin:0 auto}
+  .gifts-grid{grid-template-columns:1fr 1fr}
+  .gift-card.featured{grid-row:auto}
+  .testi-grid{grid-template-columns:1fr 1fr}
+  .footer-inner{grid-template-columns:1fr 1fr}
+}
+@media(max-width:768px){
+  .nav-links{display:none}
+  .nav-mobile-toggle{display:flex}
+  .hero-inner{grid-template-columns:1fr;text-align:center}
+  .hero-visual{display:none}
+  .hero-ctas{justify-content:center}
+  .hero-stats{justify-content:center}
+  .catering-inner{grid-template-columns:1fr}
+  .locator-inner{grid-template-columns:1fr}
+  .gifts-grid{grid-template-columns:1fr}
+  .testi-grid{grid-template-columns:1fr}
+  section{padding:64px 20px}
+  .subscription{margin:0 12px}
+}
+</style>
+</head>
+<body>
+
+<!-- PROMO STRIP -->
+<div class="promo">
+  Free shipping on orders over ₹999
+  <span>|</span>
+  Use <strong>POPFIRST</strong> for 15% off your first box
+  <span>|</span>
+  New: Masala Chai Crunch is here!
+</div>
+
+<!-- HEADER -->
+<header id="site-header">
+  <nav>
+    <!-- LOGO -->
+    <a href="index.html" class="logo">
+      <div class="logo-mark">
+        <svg viewBox="0 0 24 24"><path d="M12 2C8 2 5 5 5 9c0 2 .8 3.8 2 5.1L9 18h6l2-3.9C18.2 12.8 19 11 19 9c0-4-3-7-7-7z"/><line x1="9" y1="18" x2="9" y2="22"/><line x1="15" y1="18" x2="15" y2="22"/><line x1="12" y1="22" x2="12" y2="22"/></svg>
+      </div>
+      Popsmith
+    </a>
+
+    <!-- NAV LINKS — Dashboard last -->
+    <ul class="nav-links">
+      <li><a href="#flavors">Flavors</a></li>
+      <li><a href="#subscribe">Subscribe</a></li>
+      <li><a href="#gifts">Gifts</a></li>
+      <li><a href="#catering">Catering</a></li>
+      <li><a href="#locator">Find Us</a></li>
+      <li><a href="dashboard.html">Dashboard</a></li>
+    </ul>
+
+    <!-- NAV ACTIONS -->
+    <div class="nav-actions">
+      <!-- Dark Mode -->
+      <button class="icon-btn" id="themeBtn" title="Toggle dark mode" aria-label="Toggle dark mode">
+        <svg id="icon-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg id="icon-sun" viewBox="0 0 24 24" style="display:none"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      </button>
+      <!-- RTL -->
+      <button class="icon-btn" id="rtlBtn" title="Toggle RTL" aria-label="Toggle RTL layout">
+        <svg viewBox="0 0 24 24"><polyline points="17 8 21 12 17 16"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="13" y2="6"/><line x1="3" y1="18" x2="13" y2="18"/></svg>
+      </button>
+      <!-- Cart -->
+      <button class="cart-btn" aria-label="Cart">
+        <svg viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <span class="cart-count">3</span>
+      </button>
+      <!-- Primary CTA -->
+      <a href="login.html" class="btn btn-primary btn-sm">Order Now</a>
+      <!-- Mobile menu -->
+      <button class="nav-mobile-toggle" id="mobileMenuBtn" aria-label="Open menu">
+        <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-blob1"></div>
+  <div class="hero-blob2"></div>
+  <div class="hero-inner">
+    <div class="hero-content">
+      <div class="hero-pill">
+        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        Handcrafted in Small Batches
+      </div>
+      <h1>Popcorn That<br><em>Pops</em> Different</h1>
+      <p class="hero-sub">Gourmet flavours inspired by world cuisines — from truffle rosemary to masala chai. Air-popped fresh, delivered nationwide.</p>
+      <div class="hero-ctas">
+        <a href="#flavors" class="btn btn-primary btn-lg">Explore Flavors →</a>
+        <a href="#subscribe" class="btn btn-secondary btn-lg">Monthly Box</a>
+      </div>
+      <div class="hero-stats">
+        <div><div class="hero-stat-val">30+</div><div class="hero-stat-lbl">Unique Flavors</div></div>
+        <div><div class="hero-stat-val">2k+</div><div class="hero-stat-lbl">Happy Customers</div></div>
+        <div><div class="hero-stat-val">4.9★</div><div class="hero-stat-lbl">Average Rating</div></div>
+        <div><div class="hero-stat-val">200+</div><div class="hero-stat-lbl">Retail Partners</div></div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-img-ring">
+        <img src="https://images.unsplash.com/photo-1578849278619-e73505e9610f?w=400&h=400&fit=crop&auto=format" alt="Gourmet Popcorn" />
+      </div>
+      <div class="hero-float-card hfc-a">
+        <span class="hfc-icon">⭐</span>
+        <div><strong>4.9 Rating</strong><span>2,000+ reviews</span></div>
+      </div>
+      <div class="hero-float-card hfc-b">
+        <span class="hfc-icon">🚚</span>
+        <div><strong>Ships Nationwide</strong><span>Express available</span></div>
+      </div>
+      <div class="hero-float-card hfc-c">
+        <span class="hfc-icon">🎁</span>
+        <div><strong>Gift Boxes</strong><span>Custom tins available</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FLAVORS -->
+<section class="flavors" id="flavors">
+  <div class="container">
+    <div class="section-head fade-up">
+      <div class="section-eyebrow">Flavor Catalog</div>
+      <h2>Unique Flavors for Every Craving</h2>
+      <p>Over 30 handcrafted flavors — from timeless classics to bold seasonal innovations. Every batch air-popped fresh with premium ingredients.</p>
+    </div>
+    <div class="flavors-grid">
+      <div class="flavor-card fade-up">
+        <div class="fc-img"><img src="https://images.unsplash.com/photo-1535047466967-f4993cdc5f62?w=200&h=200&fit=crop&auto=format" alt="Honey Butter"/></div>
+        <div class="fc-body">
+          <span class="fc-badge badge-pop">Popular</span>
+          <h3>Honey Butter Bliss</h3>
+          <p>Rich cultured butter with wildflower honey and sea salt.</p>
+          <div class="fc-foot">
+            <span class="fc-price">₹349</span>
+            <button class="fc-add" aria-label="Add to cart"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+          </div>
+        </div>
+      </div>
+      <div class="flavor-card fade-up">
+        <div class="fc-img"><img src="https://images.unsplash.com/photo-1506368249639-73a05d6f6488?w=200&h=200&fit=crop&auto=format" alt="Masala Chai"/></div>
+        <div class="fc-body">
+          <span class="fc-badge badge-new">New</span>
+          <h3>Masala Chai Crunch</h3>
+          <p>Cardamom, cinnamon, ginger and a whisper of black pepper.</p>
+          <div class="fc-foot">
+            <span class="fc-price">₹399</span>
+            <button class="fc-add" aria-label="Add to cart"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+          </div>
+        </div>
+      </div>
+      <div class="flavor-card fade-up">
+        <div class="fc-img"><img src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=200&h=200&fit=crop&auto=format" alt="Aged Cheddar"/></div>
+        <div class="fc-body">
+          <span class="fc-badge badge-pop">Popular</span>
+          <h3>Aged Cheddar Storm</h3>
+          <p>Slow-aged white cheddar dust with a smoky paprika finish.</p>
+          <div class="fc-foot">
+            <span class="fc-price">₹379</span>
+            <button class="fc-add" aria-label="Add to cart"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+          </div>
+        </div>
+      </div>
+      <div class="flavor-card fade-up">
+        <div class="fc-img"><img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=200&h=200&fit=crop&auto=format" alt="Truffle Rosemary"/></div>
+        <div class="fc-body">
+          <span class="fc-badge badge-vgn">Vegan</span>
+          <h3>Truffle & Rosemary</h3>
+          <p>Black truffle oil with fresh rosemary and Himalayan pink salt.</p>
+          <div class="fc-foot">
+            <span class="fc-price">₹449</span>
+            <button class="fc-add" aria-label="Add to cart"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+          </div>
+        </div>
+      </div>
+      <div class="flavor-card fade-up">
+        <div class="fc-img"><img src="https://images.unsplash.com/photo-1511381939415-e44f59d15b41?w=200&h=200&fit=crop&auto=format" alt="Dark Chocolate"/></div>
+        <div class="fc-body">
+          <span class="fc-badge badge-sea">Seasonal</span>
+          <h3>Dark Choco Sea Salt</h3>
+          <p>Belgian dark chocolate drizzle with fleur de sel crystals.</p>
+          <div class="fc-foot">
+            <span class="fc-price">₹429</span>
+            <button class="fc-add" aria-label="Add to cart"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+          </div>
+        </div>
+      </div>
+      <div class="flavor-card fade-up">
+        <div class="fc-img"><img src="https://images.unsplash.com/photo-1583337130417-3346a1be7dee?w=200&h=200&fit=crop&auto=format" alt="Lemon Pepper"/></div>
+        <div class="fc-body">
+          <span class="fc-badge badge-vgn">Vegan</span>
+          <h3>Lemon Pepper Zest</h3>
+          <p>Sun-dried lemon zest, cracked black pepper and green herbs.</p>
+          <div class="fc-foot">
+            <span class="fc-price">₹359</span>
+            <button class="fc-add" aria-label="Add to cart"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+          </div>
+        </div>
+      </div>
+      <div class="flavor-card fade-up">
+        <div class="fc-img"><img src="https://images.unsplash.com/photo-1601493700631-2b16ec4b4716?w=200&h=200&fit=crop&auto=format" alt="Mango Chilli"/></div>
+        <div class="fc-body">
+          <span class="fc-badge badge-sea">Seasonal</span>
+          <h3>Mango Chilli Tango</h3>
+          <p>Real Alphonso mango powder with Kashmiri chilli heat.</p>
+          <div class="fc-foot">
+            <span class="fc-price">₹389</span>
+            <button class="fc-add" aria-label="Add to cart"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+          </div>
+        </div>
+      </div>
+      <div class="flavor-card fade-up">
+        <div class="fc-img"><img src="https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=200&h=200&fit=crop&auto=format" alt="Roasted Garlic"/></div>
+        <div class="fc-body">
+          <span class="fc-badge badge-pop">Popular</span>
+          <h3>Roasted Garlic Herb</h3>
+          <p>Slow-roasted garlic with Italian herbs and extra-virgin olive oil.</p>
+          <div class="fc-foot">
+            <span class="fc-price">₹369</span>
+            <button class="fc-add" aria-label="Add to cart"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="center-lone">
+      <a href="#" class="btn btn-secondary">View All 30+ Flavors →</a>
+    </div>
+  </div>
+</section>
+
+<!-- SUBSCRIPTION -->
+<section class="subscription" id="subscribe">
+  <div class="container" style="padding:80px 0">
+    <div class="section-head">
+      <div class="section-eyebrow">Monthly Subscription</div>
+      <h2>Fresh Pops, Every Month</h2>
+      <p>Curated snack boxes delivered to your door. Cancel anytime, customize flavors, skip a month — total freedom.</p>
+    </div>
+    <div class="sub-grid">
+      <div class="sub-card fade-up">
+        <div class="sub-icon">🌱</div>
+        <h3>Snacker</h3>
+        <p>Perfect for individuals or curious first-timers.</p>
+        <div class="sub-price">₹599<sub>/mo</sub></div>
+        <ul class="sub-features">
+          <li>2 bags (100g each)</li>
+          <li>1 exclusive monthly flavor</li>
+          <li>Free standard shipping</li>
+          <li>Cancel anytime</li>
+        </ul>
+        <button class="btn btn-secondary">Get Started</button>
+      </div>
+      <div class="sub-card popular fade-up">
+        <div class="popular-ribbon">Most Popular</div>
+        <div class="sub-icon">🔥</div>
+        <h3>Gourmet Box</h3>
+        <p>The fan-favorite — a full snack experience every month.</p>
+        <div class="sub-price">₹1,199<sub>/mo</sub></div>
+        <ul class="sub-features">
+          <li>5 bags (100g each)</li>
+          <li>2 exclusive monthly flavors</li>
+          <li>Free priority shipping</li>
+          <li>Flavor customization</li>
+          <li>10% off all orders</li>
+        </ul>
+        <button class="btn btn-primary">Choose Gourmet</button>
+      </div>
+      <div class="sub-card fade-up">
+        <div class="sub-icon">👑</div>
+        <h3>Family Feast</h3>
+        <p>For households that pop together and stay together.</p>
+        <div class="sub-price">₹2,099<sub>/mo</sub></div>
+        <ul class="sub-features">
+          <li>10 bags (100g each)</li>
+          <li>All exclusive flavors</li>
+          <li>Free express shipping</li>
+          <li>Full customization</li>
+          <li>15% off all orders</li>
+          <li>Birthday tin gift</li>
+        </ul>
+        <button class="btn btn-secondary">Get Started</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GIFT TINS -->
+<section class="gifts" id="gifts">
+  <div class="container">
+    <div class="section-head fade-up">
+      <div class="section-eyebrow">Gift Tins</div>
+      <h2>Give the Gift of Gourmet</h2>
+      <p>Beautifully curated tins for every occasion — birthdays, Diwali, corporate gifting, and everything in between.</p>
+    </div>
+    <div class="gifts-grid">
+      <div class="gift-card featured fade-up">
+        <div class="gc-img" style="height:300px">
+          <img src="https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=280&h=280&fit=crop&auto=format" alt="Grand Celebration Tin" style="height:200px;width:200px"/>
+        </div>
+        <div class="gc-body">
+          <h3>The Grand Celebration Tin</h3>
+          <p>Our most luxurious gift — 12 premium flavors in a keepsake tin with personalized message card and satin ribbon.</p>
+          <div class="gc-foot">
+            <span class="price">₹2,499</span>
+            <a href="#" class="btn btn-primary btn-sm">Customize & Gift</a>
+          </div>
+        </div>
+      </div>
+      <div class="gift-card fade-up">
+        <div class="gc-img" style="height:148px"><img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=120&h=90&fit=crop&auto=format" alt="Celebration Duo" style="height:90px;width:90px"/></div>
+        <div class="gc-body">
+          <h3>Celebration Duo</h3>
+          <p>4 flavors, a heartfelt card, and seasonal packaging.</p>
+          <div class="gc-foot"><span class="price">₹799</span><a href="#" class="btn btn-secondary btn-sm">Order</a></div>
+        </div>
+      </div>
+      <div class="gift-card fade-up">
+        <div class="gc-img" style="height:148px"><img src="https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=120&h=90&fit=crop&auto=format" alt="Corporate Pack" style="height:90px;width:90px"/></div>
+        <div class="gc-body">
+          <h3>Corporate Pack</h3>
+          <p>Branded tins for bulk gifting, minimum 20 units.</p>
+          <div class="gc-foot"><span class="price">₹599+</span><a href="#" class="btn btn-secondary btn-sm">Enquire</a></div>
+        </div>
+      </div>
+      <div class="gift-card fade-up">
+        <div class="gc-img" style="height:148px"><img src="https://images.unsplash.com/photo-1607344645866-009c320b63e0?w=120&h=90&fit=crop&auto=format" alt="Diwali Tin" style="height:90px;width:90px"/></div>
+        <div class="gc-body">
+          <h3>Diwali Special Tin</h3>
+          <p>Festive gold tin with 6 signature Indian-inspired flavors.</p>
+          <div class="gc-foot"><span class="price">₹1,299</span><a href="#" class="btn btn-secondary btn-sm">Pre-order</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CATERING -->
+<section class="catering" id="catering">
+  <div class="container">
+    <div class="catering-inner">
+      <div class="catering-visual fade-up">
+        <div class="cat-blob"></div>
+        <img src="https://images.unsplash.com/photo-1530062845289-9109b2c9c868?w=340&h=340&fit=crop&auto=format" alt="Catering Event" />
+        <div class="catering-float">🏆 500+ Events Served</div>
+      </div>
+      <div class="catering-content fade-up">
+        <div class="section-eyebrow" style="display:inline-block">Catering</div>
+        <h2>Pop Up the Party Wherever You Are</h2>
+        <p>From intimate weddings to large corporate events — our gourmet popcorn stations make every gathering unforgettable.</p>
+        <ul class="catering-list">
+          <li>
+            <div class="cat-icon"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+            <div><strong>Weddings & Celebrations</strong><span>Custom flavor bars, favor bags, and branded stations for your special day.</span></div>
+          </li>
+          <li>
+            <div class="cat-icon"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></div>
+            <div><strong>Corporate Events</strong><span>Branded tins, bulk orders, and live popcorn stations for conferences and launches.</span></div>
+          </li>
+          <li>
+            <div class="cat-icon"><svg viewBox="0 0 24 24"><path d="M20 7H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/><path d="M12 7V3"/><circle cx="12" cy="3" r="1"/></svg></div>
+            <div><strong>Birthday Parties</strong><span>Interactive popcorn bar with 10+ flavors and personalized containers.</span></div>
+          </li>
+          <li>
+            <div class="cat-icon"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="2"/><path d="M7 2v20M17 2v20M2 12h20M2 7h5M2 17h5M17 17h5M17 7h5"/></svg></div>
+            <div><strong>Movie Nights & Screenings</strong><span>Oversized buckets and cinema-grade flavors for the ultimate experience.</span></div>
+          </li>
+        </ul>
+        <a href="#" class="btn btn-primary">Request a Catering Quote →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STORE LOCATOR -->
+<section class="locator" id="locator">
+  <div class="container">
+    <div class="section-head fade-up">
+      <div class="section-eyebrow">Store Locator</div>
+      <h2>Find Us Near You</h2>
+      <p>Available at 200+ retail partners across India. Find your nearest Popsmith stockist.</p>
+    </div>
+    <div class="locator-inner">
+      <div>
+        <div class="search-wrap">
+          <input type="text" placeholder="Enter city, area, or pin code…" aria-label="Search location"/>
+          <button>Search</button>
+        </div>
+        <div class="store-list">
+          <div class="store-item active">
+            <div class="store-dot"></div>
+            <div><strong>Foodhall – Indiranagar</strong><span>No. 100 Feet Road, Indiranagar, Bengaluru</span></div>
+            <span class="store-km">1.2 km</span>
+          </div>
+          <div class="store-item">
+            <div class="store-dot"></div>
+            <div><strong>Nature's Basket – Koramangala</strong><span>80 Feet Rd, 4th Block, Koramangala</span></div>
+            <span class="store-km">3.5 km</span>
+          </div>
+          <div class="store-item">
+            <div class="store-dot"></div>
+            <div><strong>Le Marché – Whitefield</strong><span>ITPL Main Road, Whitefield</span></div>
+            <span class="store-km">8.1 km</span>
+          </div>
+          <div class="store-item">
+            <div class="store-dot"></div>
+            <div><strong>Spar Hypermarket – Jayanagar</strong><span>11th Main, Jayanagar 4th Block</span></div>
+            <span class="store-km">5.3 km</span>
+          </div>
+          <div class="store-item">
+            <div class="store-dot"></div>
+            <div><strong>Conscious Food – HSR Layout</strong><span>Sector 2, HSR Layout</span></div>
+            <span class="store-km">6.7 km</span>
+          </div>
+        </div>
+        <div style="margin-top:18px">
+          <a href="#" class="btn btn-secondary btn-sm">Become a Retail Partner →</a>
+        </div>
+      </div>
+      <div class="map-placeholder">
+        <div class="map-grid"></div>
+        <div class="map-road-h" style="top:35%"></div>
+        <div class="map-road-h" style="top:62%"></div>
+        <div class="map-road-v" style="left:40%"></div>
+        <div class="map-road-v" style="left:68%"></div>
+        <div class="map-pin-dot" style="top:32%;left:28%"></div>
+        <div class="map-pin-dot" style="top:54%;left:52%"></div>
+        <div class="map-pin-dot" style="top:22%;left:63%"></div>
+        <div class="map-pin-dot" style="top:68%;left:24%"></div>
+        <div class="map-pin-dot" style="top:38%;right:18%"></div>
+        <div class="map-label" style="top:22%;left:35%">Bengaluru</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+  <div class="container">
+    <div class="section-head fade-up">
+      <div class="section-eyebrow">Reviews</div>
+      <h2>Popcorn Lovers Speak</h2>
+      <p>Thousands of happy snackers and counting. Here's what they have to say about Popsmith.</p>
+    </div>
+    <div class="testi-grid">
+      <div class="testi-card fade-up">
+        <div class="stars">★★★★★</div>
+        <blockquote>"The Truffle Rosemary flavor is absolutely divine. I ordered it as a gift and ended up keeping it for myself. No regrets whatsoever!"</blockquote>
+        <div class="testi-author">
+          <div class="t-avatar">PS</div>
+          <div><div class="t-name">Priya Sharma</div><div class="t-loc">Mumbai · Gourmet Box Subscriber</div></div>
+        </div>
+      </div>
+      <div class="testi-card fade-up">
+        <div class="stars">★★★★★</div>
+        <blockquote>"We used Popsmith for our office Diwali party — 120 people and everyone was raving. The corporate tins looked stunning. Highly recommend!"</blockquote>
+        <div class="testi-author">
+          <div class="t-avatar">RM</div>
+          <div><div class="t-name">Rahul Mehra</div><div class="t-loc">Bengaluru · Corporate Client</div></div>
+        </div>
+      </div>
+      <div class="testi-card fade-up">
+        <div class="stars">★★★★★</div>
+        <blockquote>"The Masala Chai Crunch is unlike anything I've ever tasted. Sweet, spicy, and completely addictive. My go-to movie night snack!"</blockquote>
+        <div class="testi-author">
+          <div class="t-avatar">SP</div>
+          <div><div class="t-name">Suriya Prakash</div><div class="t-loc">Tamilnadu · Snacker Subscriber</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="footer-brand-logo">
+        <div class="footer-logo-mark">
+          <svg viewBox="0 0 24 24"><path d="M12 2C8 2 5 5 5 9c0 2 .8 3.8 2 5.1L9 18h6l2-3.9C18.2 12.8 19 11 19 9c0-4-3-7-7-7z"/><line x1="9" y1="18" x2="9" y2="22"/><line x1="15" y1="18" x2="15" y2="22"/></svg>
+        </div>
+        <span>Popsmith</span>
+      </div>
+      <p>Handcrafted gourmet popcorn made in small batches with the finest ingredients. Delivered fresh across India.</p>
+      <div class="footer-social">
+        <div class="fsoc" title="Instagram"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".5" fill="currentColor" stroke="none"/></svg></div>
+        <div class="fsoc" title="Facebook"><svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></div>
+        <div class="fsoc" title="Twitter/X"><svg viewBox="0 0 24 24"><path d="M4 4l16 16M4 20L20 4"/></svg></div>
+        <div class="fsoc" title="YouTube"><svg viewBox="0 0 24 24"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.95C5.12 20 12 20 12 20s6.88 0 8.59-.47a2.78 2.78 0 0 0 1.95-1.95A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75,15.02 15.5,12 9.75,8.98 9.75,15.02" fill="currentColor" stroke="none"/></svg></div>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Shop</h4>
+      <ul>
+        <li><a href="#flavors">All Flavors</a></li>
+        <li><a href="#subscribe">Subscriptions</a></li>
+        <li><a href="#gifts">Gift Tins</a></li>
+        <li><a href="#">Bundles</a></li>
+        <li><a href="#">New Arrivals</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="#">Our Story</a></li>
+        <li><a href="#">Ingredients</a></li>
+        <li><a href="#catering">Catering</a></li>
+        <li><a href="#">Retail Partners</a></li>
+        <li><a href="#">Press</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Help</h4>
+      <ul>
+        <li><a href="#">FAQ</a></li>
+        <li><a href="#">Shipping Policy</a></li>
+        <li><a href="#">Returns</a></li>
+        <li><a href="#">Contact Us</a></li>
+        <li><a href="#">Track Order</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 Popsmith — Artisan Popcorn & Gourmet Snacks. All rights reserved.</p>
+    <p>Privacy Policy · Terms of Service · Cookie Settings</p>
+  </div>
+</footer>
+
+<script>
+  // Dark mode
+  const themeBtn=document.getElementById('themeBtn');
+  const moonIco=document.getElementById('icon-moon');
+  const sunIco=document.getElementById('icon-sun');
+  themeBtn.addEventListener('click',()=>{
+    const dark=document.documentElement.getAttribute('data-theme')==='dark';
+    document.documentElement.setAttribute('data-theme',dark?'light':'dark');
+    moonIco.style.display=dark?'block':'none';
+    sunIco.style.display=dark?'none':'block';
+  });
+
+  // RTL
+  document.getElementById('rtlBtn').addEventListener('click',()=>{
+    document.documentElement.dir=document.documentElement.dir==='rtl'?'ltr':'rtl';
+  });
+
+  // Store list active
+  document.querySelectorAll('.store-item').forEach(item=>{
+    item.addEventListener('click',()=>{
+      document.querySelectorAll('.store-item').forEach(i=>i.classList.remove('active'));
+      item.classList.add('active');
+    });
+  });
+
+  // Cart add feedback
+  document.querySelectorAll('.fc-add').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      btn.innerHTML='<svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:#fff;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round"><polyline points="20 6 9 17 4 12"/></svg>';
+      btn.style.background='#22863A';
+      setTimeout(()=>{
+        btn.innerHTML='<svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>';
+        btn.style.background='';
+      },1600);
+    });
+  });
+
+  // Scroll fade in
+  const io=new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in')}});
+  },{threshold:.1});
+  document.querySelectorAll('.fade-up').forEach(el=>io.observe(el));
+
+  // Scroll header shadow
+  window.addEventListener('scroll',()=>{
+    document.getElementById('site-header').style.boxShadow=window.scrollY>20?'0 2px 20px rgba(200,57,10,.08)':'none';
+  });
+
+  // Filter button clicks
+  document.querySelectorAll('.order-filters .filter-btn').forEach(b=>{
+    b.addEventListener('click',()=>{
+      document.querySelectorAll('.order-filters .filter-btn').forEach(x=>x.classList.remove('active'));
+      b.classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>
