@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sign Up – Popsmith</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Sign Up – Popsmith | Join the Gourmet Popcorn Club</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -19,23 +19,34 @@
     --white: #FFFFFF;
     --border: #E8D5C0;
     --card-bg: #FFFDF9;
-    --shadow: 0 4px 24px rgba(200,57,10,0.10);
-    --shadow-lg: 0 20px 60px rgba(200,57,10,0.15);
-    --transition: 0.3s cubic-bezier(0.4,0,0.2,1);
+    --radius: 20px;
+    --shadow-sm: 0 8px 20px rgba(0,0,0,0.02), 0 2px 6px rgba(200,57,10,0.05);
+    --shadow: 0 20px 35px -12px rgba(200,57,10,0.12);
+    --shadow-lg: 0 25px 45px -12px rgba(200,57,10,0.18);
+    --transition: 0.25s cubic-bezier(0.2, 0, 0, 1);
     --font-display: 'Playfair Display', serif;
     --font-body: 'DM Sans', sans-serif;
   }
+
   [data-theme="dark"] {
-    --bg: #140A00;
-    --bg-cream: #1E1208;
-    --dark: #FFF3E0;
-    --text: #F5E6D0;
-    --muted: #B89070;
-    --white: #1E1208;
-    --border: #3D2B1A;
-    --card-bg: #221508;
+    --bg: #0F0700;
+    --bg-cream: #1D1208;
+    --dark: #FFEFDF;
+    --text: #F2E2D0;
+    --muted: #BB987A;
+    --white: #1C1108;
+    --border: #3E2A18;
+    --card-bg: #22170E;
+    --shadow: 0 20px 35px -12px rgba(0,0,0,0.6);
+    --shadow-lg: 0 25px 45px -12px rgba(0,0,0,0.7);
   }
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
   body {
     font-family: var(--font-body);
     background: var(--bg);
@@ -44,284 +55,745 @@
     display: flex;
     align-items: stretch;
     overflow-x: hidden;
+    width: 100%;
   }
 
+  /* TOP CONTROLS - fixed position */
   .top-controls {
-    position: fixed; top: 20px; right: 24px;
-    display: flex; gap: 10px; z-index: 100;
+    position: fixed;
+    top: 24px;
+    right: 28px;
+    display: flex;
+    gap: 12px;
+    z-index: 200;
   }
-  .ctrl-btn {
-    width: 40px; height: 40px;
-    background: var(--card-bg); border: 1px solid var(--border);
-    border-radius: 10px; cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.1rem; transition: var(--transition); color: var(--text);
-  }
-  .ctrl-btn:hover { background: var(--bg-cream); border-color: var(--primary); }
 
-  /* LEFT PANEL */
-  .auth-left {
-    flex: 1; display: none;
-    background: linear-gradient(135deg, #1A0F00 0%, #3D1A00 50%, #C8390A 100%);
-    position: relative; overflow: hidden; align-items: center; justify-content: center;
-    flex-direction: column; padding: 60px;
+  .ctrl-btn {
+    width: 44px;
+    height: 44px;
+    background: var(--card-bg);
+    backdrop-filter: blur(2px);
+    border: 1px solid var(--border);
+    border-radius: 60px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    transition: all 0.2s ease;
+    color: var(--text);
+    box-shadow: var(--shadow-sm);
   }
-  @media (min-width: 960px) { .auth-left { display: flex; } }
+
+  .ctrl-btn:hover {
+    background: var(--bg-cream);
+    border-color: var(--primary);
+    transform: scale(0.96);
+  }
+
+  /* ========= FIXED SPLIT LAYOUT ========= */
+  .auth-container {
+    display: flex;
+    width: 100%;
+    min-height: 100vh;
+  }
+
+  /* LEFT PANEL - perfectly centered */
+  .auth-left {
+    flex: 1.1;
+    display: none;
+    background: linear-gradient(125deg, #231000 0%, #3E1C08 45%, #B23F12 100%);
+    position: relative;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    overflow: hidden;
+  }
+
+  @media (min-width: 992px) {
+    .auth-left {
+      display: flex;
+    }
+    .auth-right {
+      flex: 0.9;
+    }
+  }
 
   .auth-left::before {
-    content: ''; position: absolute; top: -100px; left: -100px;
-    width: 500px; height: 500px;
+    content: '';
+    position: absolute;
+    top: -100px;
+    left: -100px;
+    width: 500px;
+    height: 500px;
     background: radial-gradient(circle, rgba(245,166,35,0.2) 0%, transparent 70%);
     border-radius: 50%;
+    pointer-events: none;
   }
+
   .auth-left::after {
-    content: ''; position: absolute; bottom: -80px; right: -80px;
-    width: 400px; height: 400px;
+    content: '';
+    position: absolute;
+    bottom: -80px;
+    right: -80px;
+    width: 400px;
+    height: 400px;
     background: radial-gradient(circle, rgba(200,57,10,0.3) 0%, transparent 70%);
     border-radius: 50%;
+    pointer-events: none;
   }
-  .left-content { position: relative; z-index: 1; color: #fff; text-align: center; }
-  .left-emoji { font-size: 7rem; margin-bottom: 24px; animation: float 3s ease-in-out infinite; }
-  .left-content h2 {
-    font-family: var(--font-display); font-size: 2.6rem; font-weight: 900;
-    line-height: 1.15; margin-bottom: 16px; color: #fff;
-  }
-  .left-content h2 em { color: var(--secondary); font-style: italic; }
-  .left-content p { color: rgba(255,255,255,0.65); font-size: 1.05rem; line-height: 1.7; max-width: 380px; }
-  .perks { list-style: none; margin-top: 28px; text-align: left; }
-  .perks li {
-    color: rgba(255,255,255,0.8); font-size: 0.92rem; padding: 7px 0;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
-    display: flex; align-items: center; gap: 10px;
-  }
-  .perks li:last-child { border: none; }
 
-  /* RIGHT FORM */
-  .auth-right {
-    width: 100%; max-width: 540px;
-    display: flex; align-items: flex-start; justify-content: center;
-    padding: 48px 24px;
-    background: var(--bg);
-    overflow-y: auto;
+  .left-content {
+    position: relative;
+    z-index: 2;
+    color: #fff;
+    text-align: center;
+    max-width: 500px;
+    width: 100%;
+    padding: 20px;
   }
-  @media (min-width: 960px) { .auth-right { flex: none; } }
+
+  .left-emoji {
+    font-size: 6rem;
+    margin-bottom: 24px;
+    filter: drop-shadow(0 12px 18px rgba(0,0,0,0.3));
+    animation: float 3s infinite ease-in-out;
+  }
+
+  .left-content h2 {
+    font-family: var(--font-display);
+    font-size: 2.6rem;
+    font-weight: 900;
+    line-height: 1.2;
+    margin-bottom: 16px;
+    color: #fff;
+    text-shadow: 0 2px 12px rgba(0,0,0,0.2);
+  }
+
+  .left-content h2 em {
+    color: var(--secondary);
+    font-style: italic;
+  }
+
+  .left-content p {
+    color: rgba(255, 245, 235, 0.85);
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 24px;
+  }
+
+  .perks {
+    list-style: none;
+    margin-top: 28px;
+    text-align: left;
+  }
+
+  .perks li {
+    color: rgba(255, 245, 235, 0.9);
+    font-size: 0.9rem;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .perks li:last-child {
+    border: none;
+  }
+
+  /* RIGHT PANEL - perfect vertical centering */
+  .auth-right {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 24px;
+    background: var(--bg);
+    min-height: 100vh;
+  }
 
   .auth-card {
-    width: 100%; max-width: 440px;
+    width: 100%;
+    max-width: 460px;
+    margin: 0 auto;
     background: var(--card-bg);
     border: 1px solid var(--border);
-    border-radius: 24px;
-    padding: 38px 36px 32px;
+    border-radius: 36px;
+    padding: 38px 32px 44px;
     box-shadow: var(--shadow-lg);
-    animation: fadeInUp 0.5s ease;
+    transition: transform 0.2s, box-shadow 0.2s;
   }
 
+  /* Logo */
   .card-logo {
-    display: flex; align-items: center; gap: 10px;
-    font-family: var(--font-display); font-size: 1.4rem; font-weight: 900;
-    color: var(--primary); margin-bottom: 24px; justify-content: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 28px;
   }
+
   .card-logo-icon {
-    width: 38px; height: 38px; background: var(--primary); border-radius: 50%;
-    display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
+    width: 46px;
+    height: 46px;
+    background: var(--primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+    box-shadow: 0 4px 12px rgba(200,57,10,0.3);
+  }
+
+  .card-logo span {
+    font-family: var(--font-display);
+    font-size: 1.7rem;
+    font-weight: 900;
+    color: var(--primary);
+    letter-spacing: -0.3px;
   }
 
   .auth-card h1 {
-    font-family: var(--font-display); font-size: 1.85rem; font-weight: 700;
-    color: var(--dark); margin-bottom: 4px; text-align: center;
+    font-family: var(--font-display);
+    font-size: 1.9rem;
+    font-weight: 800;
+    text-align: center;
+    color: var(--dark);
+    margin-bottom: 8px;
   }
-  .subtitle { font-size: 0.9rem; color: var(--muted); text-align: center; margin-bottom: 24px; }
-  .subtitle a { color: var(--primary); font-weight: 600; }
 
-  .social-btns { display: flex; flex-direction: column; gap: 10px; margin-bottom: 22px; }
-  .social-btn {
-    display: flex; align-items: center; gap: 12px;
-    width: 100%; padding: 13px 18px;
-    background: var(--bg); border: 1.5px solid var(--border);
-    border-radius: 12px; cursor: pointer; font-family: var(--font-body);
-    font-size: 0.9rem; font-weight: 500; color: var(--text);
-    transition: var(--transition);
+  .subtitle {
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--muted);
+    margin-bottom: 28px;
   }
-  .social-btn:hover { border-color: var(--primary); background: var(--bg-cream); transform: translateY(-1px); box-shadow: var(--shadow); }
-  .social-btn span { flex: 1; text-align: center; }
+
+  .subtitle a {
+    color: var(--primary);
+    font-weight: 600;
+    text-decoration: none;
+    border-bottom: 1px dotted transparent;
+    transition: border 0.2s;
+  }
+
+  .subtitle a:hover {
+    border-bottom-color: var(--primary);
+  }
+
+  /* Social buttons */
+  .social-btns {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+
+  .social-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+    padding: 12px 16px;
+    background: var(--bg);
+    border: 1.5px solid var(--border);
+    border-radius: 60px;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .social-btn:hover {
+    border-color: var(--primary);
+    background: var(--bg-cream);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .social-btn span {
+    flex: 1;
+    text-align: center;
+  }
 
   .divider {
-    display: flex; align-items: center; gap: 12px;
-    margin: 18px 0; color: var(--muted); font-size: 0.82rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 24px 0 20px;
+    color: var(--muted);
+    font-size: 0.75rem;
+    font-weight: 500;
   }
-  .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
-  .form-group { margin-bottom: 14px; }
+  .divider::before,
+  .divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* Form */
+  .form-group {
+    margin-bottom: 16px;
+  }
+
   .form-group label {
-    display: block; font-size: 0.85rem; font-weight: 600;
-    color: var(--text); margin-bottom: 6px;
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: var(--text);
+    letter-spacing: 0.3px;
   }
-  .input-wrap { position: relative; }
+
+  .input-wrap {
+    position: relative;
+  }
+
   .form-group input {
-    width: 100%; padding: 13px 16px;
-    border: 1.5px solid var(--border); border-radius: 12px;
-    font-family: var(--font-body); font-size: 0.95rem; color: var(--text);
-    background: var(--bg); outline: none; transition: var(--transition);
+    width: 100%;
+    padding: 13px 18px;
+    border: 1.5px solid var(--border);
+    border-radius: 60px;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    background: var(--bg);
+    color: var(--text);
+    outline: none;
+    transition: all 0.2s;
   }
-  .form-group input:focus { border-color: var(--primary); background: var(--bg-cream); box-shadow: 0 0 0 3px rgba(200,57,10,0.08); }
-  .form-group input::placeholder { color: var(--muted); }
+
+  .form-group input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(200, 57, 10, 0.15);
+    background: var(--bg-cream);
+  }
+
+  .form-group input::placeholder {
+    color: var(--muted);
+    opacity: 0.7;
+  }
+
   .eye-btn {
-    position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
-    background: none; border: none; cursor: pointer; color: var(--muted);
-    font-size: 1rem; transition: var(--transition); padding: 2px;
+    position: absolute;
+    right: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: var(--muted);
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    border-radius: 30px;
+    transition: color 0.2s;
   }
-  .eye-btn:hover { color: var(--primary); }
 
+  .eye-btn:hover {
+    color: var(--primary);
+  }
+
+  /* Terms checkbox */
   .terms {
-    display: flex; align-items: flex-start; gap: 10px;
-    font-size: 0.84rem; color: var(--muted); margin: 16px 0 18px;
-    line-height: 1.5; cursor: pointer;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin: 20px 0 22px;
+    line-height: 1.45;
+    cursor: pointer;
   }
-  .terms input[type="checkbox"] {
-    width: 16px; height: 16px; accent-color: var(--primary);
-    flex-shrink: 0; margin-top: 2px; cursor: pointer;
-  }
-  .terms a { color: var(--primary); font-weight: 600; }
 
-  .btn-full {
-    width: 100%; padding: 14px; background: var(--primary); color: #fff;
-    border: none; border-radius: 12px; font-family: var(--font-body);
-    font-size: 1rem; font-weight: 600; cursor: pointer;
-    transition: var(--transition); letter-spacing: 0.02em;
+  .terms input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--primary);
+    flex-shrink: 0;
+    margin-top: 2px;
+    cursor: pointer;
   }
-  .btn-full:hover { background: var(--primary-light); transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+
+  .terms a {
+    color: var(--primary);
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .terms a:hover {
+    text-decoration: underline;
+  }
+
+  /* Button */
+  .btn-full {
+    width: 100%;
+    background: var(--primary);
+    border: none;
+    padding: 14px 20px;
+    border-radius: 60px;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 700;
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 6px 14px rgba(200, 57, 10, 0.25);
+    letter-spacing: 0.3px;
+  }
+
+  .btn-full:hover {
+    background: var(--primary-light);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 20px rgba(200, 57, 10, 0.3);
+  }
 
   .login-link {
-    text-align: center; margin-top: 18px; font-size: 0.88rem; color: var(--muted);
+    text-align: center;
+    margin-top: 24px;
+    font-size: 0.85rem;
+    color: var(--muted);
   }
-  .login-link a { color: var(--primary); font-weight: 600; text-decoration: none; }
-  .login-link a:hover { text-decoration: underline; }
 
-  @keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(24px); }
-    to { opacity: 1; transform: translateY(0); }
+  .login-link a {
+    color: var(--primary);
+    font-weight: 700;
+    text-decoration: none;
   }
+
+  .login-link a:hover {
+    text-decoration: underline;
+  }
+
+  /* Animations */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
   @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-14px); }
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-14px);
+    }
+  }
+
+  /* Responsive fixes */
+  @media (max-width: 640px) {
+    .auth-card {
+      padding: 28px 20px 36px;
+      border-radius: 28px;
+    }
+    .auth-right {
+      padding: 24px 16px;
+    }
+    .left-content h2 {
+      font-size: 2rem;
+    }
+    .card-logo span {
+      font-size: 1.5rem;
+    }
+    .social-btn {
+      padding: 10px 12px;
+    }
+    .form-group input {
+      padding: 11px 16px;
+    }
+  }
+
+  @media (min-width: 992px) and (max-height: 750px) {
+    .auth-card {
+      padding: 28px 32px 34px;
+    }
+    .auth-right {
+      padding: 32px 24px;
+    }
+  }
+
+  /* Error message styling */
+  .error-message {
+    color: #dc2626;
+    font-size: 0.7rem;
+    margin-top: 4px;
+    margin-left: 12px;
+    display: block;
+  }
+
+  .toast-notification {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--primary);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 60px;
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 0.85rem;
+    z-index: 9999;
+    box-shadow: 0 12px 24px rgba(0,0,0,0.2);
+    backdrop-filter: blur(4px);
+    transition: opacity 0.3s ease;
+    pointer-events: none;
   }
 </style>
 </head>
 <body>
 
 <div class="top-controls">
-  <button class="ctrl-btn" id="themeToggle" title="Toggle dark mode">🌙</button>
+  <button class="ctrl-btn" id="themeToggle" aria-label="Toggle dark mode">🌙</button>
 </div>
 
-<!-- LEFT PANEL -->
-<div class="auth-left">
-  <div class="left-content">
-    <div class="left-emoji">🎁</div>
-    <h2>Join the <em>Popsmith</em> Family</h2>
-    <p>Create your account and unlock a world of gourmet popcorn, exclusive flavors, and exciting rewards.</p>
-    <ul class="perks">
-      <li>🍿 Access to 30+ exclusive gourmet flavors</li>
-      <li>📦 Monthly curated snack box subscription</li>
-      <li>🎁 Birthday gifts and member-only offers</li>
-      <li>🚚 Free shipping on orders over ₹999</li>
-      <li>⭐ Early access to new seasonal flavors</li>
-    </ul>
+<div class="auth-container">
+  <!-- LEFT PANEL - BRANDING -->
+  <div class="auth-left">
+    <div class="left-content">
+      <div class="left-emoji">🎁✨</div>
+      <h2>Join the <em>Popsmith</em> Family</h2>
+      <p>Create your account and unlock a world of gourmet popcorn, exclusive flavors, and exciting rewards.</p>
+      <ul class="perks">
+        <li>🍿 Access to 30+ exclusive gourmet flavors</li>
+        <li>📦 Monthly curated snack box subscription</li>
+        <li>🎁 Birthday gifts and member-only offers</li>
+        <li>🚚 Free shipping on orders over ₹999</li>
+        <li>⭐ Early access to new seasonal flavors</li>
+      </ul>
+    </div>
   </div>
-</div>
 
-<!-- RIGHT FORM -->
-<div class="auth-right">
-  <div class="auth-card">
-    <div class="card-logo">
-      <div class="card-logo-icon">🍿</div>
-      Popsmith
-    </div>
-
-    <h1>Create Account</h1>
-    <p class="subtitle">Already have one? <a href="login.html">Sign in →</a></p>
-
-    <!-- SOCIAL SIGN UP -->
-    <div class="social-btns">
-      <button class="social-btn">
-        <svg width="18" height="18" viewBox="0 0 18 18"><path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/><path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z" fill="#34A853"/><path d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z" fill="#FBBC05"/><path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/></svg>
-        <span>Sign up with Google</span>
-      </button>
-      <button class="social-btn">
-        <svg width="18" height="18" viewBox="0 0 814 1000"><path d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.5-164-39.5c-76 0-103.7 40.8-165.9 40.8s-105-57.8-155.5-127.4C46 480.3-.6 339.3-.6 202.7-.6 71.1 55.4 3.4 155.1 3.4c58.4 0 103.7 38.2 138.5 38.2 33.2 0 85.5-40.8 151.6-40.8 24.4 0 108.2 2.6 168.6 71.9zm-174.6-67.5c-4.5 35.8-21.3 71.9-42.8 95.7-23.1 25.6-56.9 44.2-90 44.2-4.5 0-9-.6-13.5-1.3-2.6-37.7 12.3-76.5 33.8-100.9 26.3-31.8 64.4-52.4 112.5-57.8z" fill="currentColor"/></svg>
-        <span>Sign up with Apple</span>
-      </button>
-      <button class="social-btn">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-        <span>Sign up with Facebook</span>
-      </button>
-    </div>
-
-    <div class="divider">or sign up with email</div>
-
-    <form onsubmit="return false;">
-      <div class="form-group">
-        <label for="firstName">First Name</label>
-        <input type="text" id="firstName" placeholder="e.g. Ananya" autocomplete="given-name" />
+  <!-- RIGHT PANEL - SIGNUP FORM (FULLY FIXED) -->
+  <div class="auth-right">
+    <div class="auth-card">
+      <div class="card-logo">
+        <div class="card-logo-icon">🍿</div>
+        <span>Popsmith</span>
       </div>
-      <div class="form-group">
-        <label for="lastName">Last Name</label>
-        <input type="text" id="lastName" placeholder="e.g. Reddy" autocomplete="family-name" />
+
+      <h1>Create Account</h1>
+      <p class="subtitle">Already have one? <a href="#" id="loginLinkMain">Sign in →</a></p>
+
+      <!-- SOCIAL SIGNUP BUTTONS -->
+      <div class="social-btns">
+        <button class="social-btn" id="googleSignupBtn">
+          <svg width="18" height="18" viewBox="0 0 18 18"><path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/><path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z" fill="#34A853"/><path d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z" fill="#FBBC05"/><path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/></svg>
+          <span>Sign up with Google</span>
+        </button>
+        <button class="social-btn" id="appleSignupBtn">
+          <svg width="18" height="18" viewBox="0 0 814 1000"><path d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.5-164-39.5c-76 0-103.7 40.8-165.9 40.8s-105-57.8-155.5-127.4C46 480.3-.6 339.3-.6 202.7-.6 71.1 55.4 3.4 155.1 3.4c58.4 0 103.7 38.2 138.5 38.2 33.2 0 85.5-40.8 151.6-40.8 24.4 0 108.2 2.6 168.6 71.9zm-174.6-67.5c-4.5 35.8-21.3 71.9-42.8 95.7-23.1 25.6-56.9 44.2-90 44.2-4.5 0-9-.6-13.5-1.3-2.6-37.7 12.3-76.5 33.8-100.9 26.3-31.8 64.4-52.4 112.5-57.8z" fill="currentColor"/></svg>
+          <span>Sign up with Apple</span>
+        </button>
+        <button class="social-btn" id="facebookSignupBtn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          <span>Sign up with Facebook</span>
+        </button>
       </div>
-      <div class="form-group">
-        <label for="email">Email Address</label>
-        <input type="email" id="email" placeholder="you@example.com" autocomplete="email" />
-      </div>
-      <div class="form-group">
-        <label for="phone">Phone Number</label>
-        <input type="tel" id="phone" placeholder="+91 98765 43210" autocomplete="tel" />
-      </div>
-      <div class="form-group">
-        <label for="password">Password</label>
-        <div class="input-wrap">
-          <input type="password" id="password" placeholder="Min. 8 characters" autocomplete="new-password" />
-          <button type="button" class="eye-btn" id="eyeBtn1" aria-label="Toggle password visibility">👁️</button>
+
+      <div class="divider">or sign up with email</div>
+
+      <!-- SIGNUP FORM WITH VALIDATION -->
+      <form id="signupForm">
+        <div class="form-group">
+          <label for="firstName">First Name</label>
+          <input type="text" id="firstName" placeholder="e.g. Ananya" autocomplete="given-name" />
         </div>
-      </div>
-      <div class="form-group">
-        <label for="confirmPassword">Confirm Password</label>
-        <div class="input-wrap">
-          <input type="password" id="confirmPassword" placeholder="Re-enter password" autocomplete="new-password" />
-          <button type="button" class="eye-btn" id="eyeBtn2" aria-label="Toggle confirm password visibility">👁️</button>
+        <div class="form-group">
+          <label for="lastName">Last Name</label>
+          <input type="text" id="lastName" placeholder="e.g. Reddy" autocomplete="family-name" />
         </div>
-      </div>
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" placeholder="you@example.com" autocomplete="email" />
+        </div>
+        <div class="form-group">
+          <label for="phone">Phone Number</label>
+          <input type="tel" id="phone" placeholder="+91 98765 43210" autocomplete="tel" />
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <div class="input-wrap">
+            <input type="password" id="password" placeholder="Min. 8 characters" autocomplete="new-password" />
+            <button type="button" class="eye-btn" id="eyeBtn1" aria-label="Toggle password visibility">👁️</button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="confirmPassword">Confirm Password</label>
+          <div class="input-wrap">
+            <input type="password" id="confirmPassword" placeholder="Re-enter password" autocomplete="new-password" />
+            <button type="button" class="eye-btn" id="eyeBtn2" aria-label="Toggle confirm password visibility">👁️</button>
+          </div>
+        </div>
 
-      <label class="terms">
-        <input type="checkbox" id="termsCheck" />
-        I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a> of Popsmith.
-      </label>
+        <label class="terms">
+          <input type="checkbox" id="termsCheck" />
+          I agree to the <a href="#" id="termsLink">Terms of Service</a> and <a href="#" id="privacyLink">Privacy Policy</a> of Popsmith.
+        </label>
 
-      <button type="submit" class="btn-full">Create My Account →</button>
-    </form>
+        <button type="submit" class="btn-full" id="signupSubmitBtn">Create My Account →</button>
+      </form>
 
-    <p class="login-link">Already have an account? <a href="login.html">Sign in</a></p>
+      <p class="login-link">Already have an account? <a href="#" id="loginLinkFooter">Sign in</a></p>
+    </div>
   </div>
 </div>
 
 <script>
-  const themeBtn = document.getElementById('themeToggle');
-  themeBtn.addEventListener('click', () => {
-    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-    document.documentElement.setAttribute('data-theme', isDark ? '' : 'dark');
-    themeBtn.textContent = isDark ? '🌙' : '☀️';
-  });
+  (function() {
+    // ---------- DARK MODE TOGGLE ----------
+    const themeBtn = document.getElementById('themeToggle');
+    const htmlElement = document.documentElement;
+    const isDark = htmlElement.getAttribute('data-theme') === 'dark';
+    themeBtn.textContent = isDark ? '☀️' : '🌙';
 
-  function makeEyeToggle(btnId, inputId) {
-    const btn = document.getElementById(btnId);
-    const field = document.getElementById(inputId);
-    let shown = false;
-    btn.addEventListener('click', () => {
-      shown = !shown;
-      field.type = shown ? 'text' : 'password';
-      btn.textContent = shown ? '🙈' : '👁️';
+    themeBtn.addEventListener('click', () => {
+      const current = htmlElement.getAttribute('data-theme');
+      if (current === 'dark') {
+        htmlElement.setAttribute('data-theme', 'light');
+        themeBtn.textContent = '🌙';
+      } else {
+        htmlElement.setAttribute('data-theme', 'dark');
+        themeBtn.textContent = '☀️';
+      }
     });
-  }
-  makeEyeToggle('eyeBtn1', 'password');
-  makeEyeToggle('eyeBtn2', 'confirmPassword');
+
+    // ---------- PASSWORD EYE TOGGLE (FIXED for both fields) ----------
+    function initEyeToggle(btnId, inputId) {
+      const btn = document.getElementById(btnId);
+      const input = document.getElementById(inputId);
+      if (!btn || !input) return;
+      let visible = false;
+      btn.addEventListener('click', () => {
+        visible = !visible;
+        input.type = visible ? 'text' : 'password';
+        btn.textContent = visible ? '🙈' : '👁️';
+      });
+    }
+    initEyeToggle('eyeBtn1', 'password');
+    initEyeToggle('eyeBtn2', 'confirmPassword');
+
+    // ---------- TOAST NOTIFICATION (user friendly) ----------
+    function showToast(message, isError = true) {
+      const existingToast = document.querySelector('.toast-notification');
+      if (existingToast) existingToast.remove();
+      const toast = document.createElement('div');
+      toast.className = 'toast-notification';
+      toast.textContent = message;
+      toast.style.backgroundColor = isError ? '#C8390A' : '#2E7D32';
+      document.body.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+
+    // ---------- VALIDATION & SIGNUP HANDLER ----------
+    const signupForm = document.getElementById('signupForm');
+    
+    function validateForm() {
+      const firstName = document.getElementById('firstName').value.trim();
+      const lastName = document.getElementById('lastName').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const password = document.getElementById('password').value;
+      const confirmPwd = document.getElementById('confirmPassword').value;
+      const termsChecked = document.getElementById('termsCheck').checked;
+
+      if (!firstName) {
+        showToast('✨ Please enter your first name.', true);
+        return false;
+      }
+      if (!lastName) {
+        showToast('📝 Please enter your last name.', true);
+        return false;
+      }
+      if (!email) {
+        showToast('📧 Email address is required.', true);
+        return false;
+      }
+      const emailRegex = /^[^\s@]+@([^\s@]+\.)+[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        showToast('Please enter a valid email address (e.g., name@example.com).', true);
+        return false;
+      }
+      if (!phone) {
+        showToast('📞 Phone number is required for order updates.', true);
+        return false;
+      }
+      const phoneRegex = /^[\+\d\s\-\(\)]{8,}$/;
+      if (!phoneRegex.test(phone)) {
+        showToast('Please enter a valid phone number.', true);
+        return false;
+      }
+      if (!password) {
+        showToast('🔒 Password cannot be empty.', true);
+        return false;
+      }
+      if (password.length < 8) {
+        showToast('Password must be at least 8 characters long.', true);
+        return false;
+      }
+      if (password !== confirmPwd) {
+        showToast('❗ Passwords do not match. Please check again.', true);
+        return false;
+      }
+      if (!termsChecked) {
+        showToast('Please accept the Terms of Service and Privacy Policy to continue.', true);
+        return false;
+      }
+      return true;
+    }
+
+    signupForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (validateForm()) {
+        const firstName = document.getElementById('firstName').value.trim();
+        showToast(`🎉 Welcome, ${firstName}! Your account has been created. (Demo)`, false);
+        // Simulate redirect to login/dashboard after 1.2 sec
+        setTimeout(() => {
+          alert(`✨ Demo Signup Successful!\nWelcome to Popsmith family!\n(Full backend integration would happen here.)`);
+          // In real app: window.location.href = "login.html";
+        }, 800);
+      }
+    });
+
+    // ---------- SOCIAL BUTTONS DEMO ----------
+    const googleBtn = document.getElementById('googleSignupBtn');
+    const appleBtn = document.getElementById('appleSignupBtn');
+    const facebookBtn = document.getElementById('facebookSignupBtn');
+    
+    function socialDemo(provider) {
+      showToast(`🍿 ${provider} signup would connect here. (Demo mode)`, false);
+    }
+    if (googleBtn) googleBtn.addEventListener('click', () => socialDemo('Google'));
+    if (appleBtn) appleBtn.addEventListener('click', () => socialDemo('Apple'));
+    if (facebookBtn) facebookBtn.addEventListener('click', () => socialDemo('Facebook'));
+
+    // ---------- LINKS (demo navigation) ----------
+    const loginMain = document.getElementById('loginLinkMain');
+    const loginFooter = document.getElementById('loginLinkFooter');
+    const termsLink = document.getElementById('termsLink');
+    const privacyLink = document.getElementById('privacyLink');
+
+    if (loginMain) loginMain.addEventListener('click', (e) => { e.preventDefault(); showToast('🚪 Redirect to Sign In page (demo).', false);window.location.href = "login.html" });
+    if (loginFooter) loginFooter.addEventListener('click', (e) => { e.preventDefault(); showToast('🚪 Redirect to Sign In page (demo).', false); window.location.href = "login.html"; });
+    if (termsLink) termsLink.addEventListener('click', (e) => { e.preventDefault(); showToast('📜 Terms of Service (demo modal would open).', false); });
+    if (privacyLink) privacyLink.addEventListener('click', (e) => { e.preventDefault(); showToast('🔒 Privacy Policy (demo modal would open).', false); });
+  })();
 </script>
 </body>
 </html>

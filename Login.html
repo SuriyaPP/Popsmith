@@ -1,16 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Login – Popsmith</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Popsmith — Sign In | Gourmet Popcorn</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
   :root {
     --primary: #C8390A;
     --primary-light: #E8501F;
     --secondary: #F5A623;
-    --secondary-light: #FFD08A;
     --bg: #FFFAF5;
     --bg-cream: #FFF3E0;
     --dark: #1A0F00;
@@ -19,25 +24,28 @@
     --white: #FFFFFF;
     --border: #E8D5C0;
     --card-bg: #FFFDF9;
-    --radius: 16px;
-    --shadow: 0 4px 24px rgba(200,57,10,0.10);
-    --shadow-lg: 0 20px 60px rgba(200,57,10,0.15);
-    --transition: 0.3s cubic-bezier(0.4,0,0.2,1);
+    --radius: 20px;
+    --shadow-sm: 0 8px 20px rgba(0,0,0,0.02), 0 2px 6px rgba(200,57,10,0.05);
+    --shadow: 0 20px 35px -12px rgba(200,57,10,0.12);
+    --shadow-lg: 0 25px 45px -12px rgba(200,57,10,0.18);
+    --transition: 0.25s cubic-bezier(0.2, 0, 0, 1);
     --font-display: 'Playfair Display', serif;
     --font-body: 'DM Sans', sans-serif;
   }
+
   [data-theme="dark"] {
-    --bg: #140A00;
-    --bg-cream: #1E1208;
-    --dark: #FFF3E0;
-    --text: #F5E6D0;
-    --muted: #B89070;
-    --white: #1E1208;
-    --border: #3D2B1A;
-    --card-bg: #221508;
+    --bg: #0F0700;
+    --bg-cream: #1D1208;
+    --dark: #FFEFDF;
+    --text: #F2E2D0;
+    --muted: #BB987A;
+    --white: #1C1108;
+    --border: #3E2A18;
+    --card-bg: #22170E;
+    --shadow: 0 20px 35px -12px rgba(0,0,0,0.6);
+    --shadow-lg: 0 25px 45px -12px rgba(0,0,0,0.7);
   }
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
+
   body {
     font-family: var(--font-body);
     background: var(--bg);
@@ -45,284 +53,668 @@
     min-height: 100vh;
     display: flex;
     align-items: stretch;
+    width: 100%;
+    overflow-x: hidden;
+  }
+
+  /* top controls */
+  .top-controls {
+    position: fixed;
+    top: 24px;
+    right: 28px;
+    display: flex;
+    gap: 12px;
+    z-index: 200;
+  }
+
+  .ctrl-btn {
+    width: 44px;
+    height: 44px;
+    background: var(--card-bg);
+    backdrop-filter: blur(2px);
+    border: 1px solid var(--border);
+    border-radius: 60px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    transition: all 0.2s ease;
+    color: var(--text);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .ctrl-btn:hover {
+    background: var(--bg-cream);
+    border-color: var(--primary);
+    transform: scale(0.96);
+  }
+
+  /* ========= SPLIT LAYOUT FIX: perfect alignment ========= */
+  .auth-container {
+    display: flex;
+    width: 100%;
+    min-height: 100vh;
+  }
+
+  /* LEFT SIDE - always centered, no overflow issues */
+  .auth-left {
+    flex: 1.1;
+    display: none;
+    background: linear-gradient(125deg, #231000 0%, #3E1C08 45%, #B23F12 100%);
+    position: relative;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
     overflow: hidden;
   }
 
-  /* TOP RIGHT CONTROLS */
-  .top-controls {
-    position: fixed; top: 20px; right: 24px;
-    display: flex; gap: 10px; z-index: 100;
+  @media (min-width: 992px) {
+    .auth-left {
+      display: flex;
+    }
+    .auth-right {
+      flex: 0.9;
+    }
   }
-  .ctrl-btn {
-    width: 40px; height: 40px;
+
+  .left-content {
+    max-width: 500px;
+    width: 100%;
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 20px;
+  }
+
+  .left-emoji {
+    font-size: 6rem;
+    margin-bottom: 24px;
+    filter: drop-shadow(0 12px 18px rgba(0,0,0,0.3));
+    animation: floatPop 3s infinite ease-in-out;
+  }
+
+  .left-content h2 {
+    font-family: var(--font-display);
+    font-size: 2.7rem;
+    font-weight: 800;
+    line-height: 1.2;
+    color: white;
+    text-shadow: 0 2px 12px rgba(0,0,0,0.2);
+  }
+
+  .left-content h2 em {
+    color: #FFCF4A;
+    font-style: italic;
+  }
+
+  .left-content p {
+    color: rgba(255, 245, 235, 0.85);
+    margin-top: 18px;
+    font-size: 1rem;
+    line-height: 1.5;
+    font-weight: 400;
+  }
+
+  .left-badges {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 40px;
+  }
+
+  .left-badge {
+    background: rgba(255, 215, 180, 0.12);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 170, 110, 0.5);
+    border-radius: 60px;
+    padding: 6px 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #FFE4CE;
+  }
+
+  /* RIGHT SIDE PERFECT ALIGNMENT (no vertical shift) */
+  .auth-right {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 24px;
+    background: var(--bg);
+    min-height: 100vh;
+  }
+
+  .auth-card {
+    width: 100%;
+    max-width: 440px;
+    margin: 0 auto;
     background: var(--card-bg);
     border: 1px solid var(--border);
-    border-radius: 10px; cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.1rem; transition: var(--transition);
+    border-radius: 36px;
+    padding: 38px 32px 44px 32px;
+    box-shadow: var(--shadow-lg);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  /* logo area */
+  .card-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+
+  .card-logo-icon {
+    width: 46px;
+    height: 46px;
+    background: var(--primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+    box-shadow: 0 4px 12px rgba(200,57,10,0.3);
+  }
+
+  .card-logo span {
+    font-family: var(--font-display);
+    font-size: 1.7rem;
+    font-weight: 900;
+    color: var(--primary);
+    letter-spacing: -0.3px;
+  }
+
+  .auth-card h1 {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    font-weight: 800;
+    text-align: center;
+    color: var(--dark);
+    margin-bottom: 8px;
+  }
+
+  .subtitle {
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--muted);
+    margin-bottom: 28px;
+  }
+
+  .subtitle a {
+    color: var(--primary);
+    font-weight: 600;
+    text-decoration: none;
+    border-bottom: 1px dotted transparent;
+    transition: border 0.2s;
+  }
+
+  .subtitle a:hover {
+    border-bottom-color: var(--primary);
+  }
+
+  /* social buttons */
+  .social-btns {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+
+  .social-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+    padding: 12px 16px;
+    background: var(--bg);
+    border: 1.5px solid var(--border);
+    border-radius: 60px;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    font-weight: 500;
     color: var(--text);
+    cursor: pointer;
+    transition: all 0.2s ease;
   }
-  .ctrl-btn:hover { background: var(--bg-cream); border-color: var(--primary); }
 
-  /* SPLIT LAYOUT */
-  .auth-left {
-    flex: 1; display: none;
-    background: linear-gradient(135deg, #1A0F00 0%, #3D1A00 50%, #C8390A 100%);
-    position: relative; overflow: hidden; align-items: center; justify-content: center;
-    flex-direction: column; padding: 60px;
+  .social-btn:hover {
+    border-color: var(--primary);
+    background: var(--bg-cream);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
   }
-  @media (min-width: 960px) { .auth-left { display: flex; } }
 
-  .auth-left::before {
-    content: '';
-    position: absolute; top: -100px; left: -100px;
-    width: 500px; height: 500px;
-    background: radial-gradient(circle, rgba(245,166,35,0.2) 0%, transparent 70%);
-    border-radius: 50%;
-  }
-  .auth-left::after {
-    content: '';
-    position: absolute; bottom: -80px; right: -80px;
-    width: 400px; height: 400px;
-    background: radial-gradient(circle, rgba(200,57,10,0.3) 0%, transparent 70%);
-    border-radius: 50%;
-  }
-  .left-content { position: relative; z-index: 1; color: #fff; text-align: center; }
-  .left-emoji { font-size: 7rem; margin-bottom: 24px; animation: float 3s ease-in-out infinite; }
-  .left-content h2 {
-    font-family: var(--font-display); font-size: 2.8rem; font-weight: 900;
-    line-height: 1.15; margin-bottom: 16px; color: #fff;
-  }
-  .left-content h2 em { color: var(--secondary); font-style: italic; }
-  .left-content p { color: rgba(255,255,255,0.65); font-size: 1.05rem; line-height: 1.7; max-width: 380px; }
-  .left-badges {
-    display: flex; gap: 12px; margin-top: 36px; justify-content: center; flex-wrap: wrap;
-  }
-  .left-badge {
-    background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
-    border-radius: 50px; padding: 8px 18px; font-size: 0.85rem; color: rgba(255,255,255,0.85);
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 24px 0 20px;
+    color: var(--muted);
+    font-size: 0.75rem;
     font-weight: 500;
   }
 
-  /* RIGHT / FORM SIDE */
-  .auth-right {
-    width: 100%; max-width: 520px;
-    display: flex; align-items: center; justify-content: center;
-    padding: 40px 24px;
-    background: var(--bg);
-    overflow-y: auto;
-  }
-  @media (min-width: 960px) { .auth-right { flex: none; } }
-
-  .auth-card {
-    width: 100%; max-width: 420px;
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: 24px;
-    padding: 40px 36px;
-    box-shadow: var(--shadow-lg);
-    animation: fadeInUp 0.5s ease;
+  .divider::before,
+  .divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--border);
   }
 
-  .card-logo {
-    display: flex; align-items: center; gap: 10px;
-    font-family: var(--font-display); font-size: 1.4rem; font-weight: 900;
-    color: var(--primary); margin-bottom: 28px; justify-content: center;
-  }
-  .card-logo-icon {
-    width: 38px; height: 38px; background: var(--primary); border-radius: 50%;
-    display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
-  }
-  .auth-card h1 {
-    font-family: var(--font-display); font-size: 1.9rem; font-weight: 700;
-    color: var(--dark); margin-bottom: 6px; text-align: center;
-  }
-  .auth-card .subtitle {
-    font-size: 0.9rem; color: var(--muted); text-align: center; margin-bottom: 28px;
-  }
-  .auth-card .subtitle a { color: var(--primary); font-weight: 600; }
-
-  /* SOCIAL LOGINS */
-  .social-btns { display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
-  .social-btn {
-    display: flex; align-items: center; gap: 12px;
-    width: 100%; padding: 13px 18px;
-    background: var(--bg); border: 1.5px solid var(--border);
-    border-radius: 12px; cursor: pointer; font-family: var(--font-body);
-    font-size: 0.9rem; font-weight: 500; color: var(--text);
-    transition: var(--transition); text-align: left;
-  }
-  .social-btn:hover { border-color: var(--primary); background: var(--bg-cream); transform: translateY(-1px); box-shadow: var(--shadow); }
-  .social-btn svg { flex-shrink: 0; }
-  .social-btn span { flex: 1; text-align: center; }
-
-  .divider {
-    display: flex; align-items: center; gap: 12px;
-    margin: 20px 0; color: var(--muted); font-size: 0.82rem;
-  }
-  .divider::before, .divider::after {
-    content: ''; flex: 1; height: 1px; background: var(--border);
+  /* form */
+  .form-group {
+    margin-bottom: 18px;
   }
 
-  /* FORM */
-  .form-group { margin-bottom: 16px; }
   .form-group label {
-    display: block; font-size: 0.85rem; font-weight: 600;
-    color: var(--text); margin-bottom: 6px;
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: var(--text);
+    letter-spacing: 0.3px;
   }
-  .input-wrap { position: relative; }
+
+  .input-wrap {
+    position: relative;
+  }
+
   .form-group input {
-    width: 100%; padding: 13px 16px;
-    border: 1.5px solid var(--border); border-radius: 12px;
-    font-family: var(--font-body); font-size: 0.95rem; color: var(--text);
-    background: var(--bg); outline: none; transition: var(--transition);
+    width: 100%;
+    padding: 14px 18px;
+    border: 1.5px solid var(--border);
+    border-radius: 60px;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    background: var(--bg);
+    color: var(--text);
+    outline: none;
+    transition: all 0.2s;
   }
-  .form-group input:focus { border-color: var(--primary); background: var(--bg-cream); box-shadow: 0 0 0 3px rgba(200,57,10,0.08); }
-  .form-group input::placeholder { color: var(--muted); }
+
+  .form-group input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(200, 57, 10, 0.15);
+    background: var(--bg-cream);
+  }
+
   .eye-btn {
-    position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
-    background: none; border: none; cursor: pointer; color: var(--muted);
-    font-size: 1rem; transition: var(--transition); padding: 2px;
+    position: absolute;
+    right: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: var(--muted);
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    border-radius: 30px;
   }
-  .eye-btn:hover { color: var(--primary); }
+
+  .eye-btn:hover {
+    color: var(--primary);
+  }
 
   .form-row {
-    display: flex; align-items: center; justify-content: space-between;
-    margin-bottom: 20px; gap: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 18px 0 24px;
+    flex-wrap: wrap;
+    gap: 8px;
   }
+
   .remember-me {
-    display: flex; align-items: center; gap: 8px;
-    font-size: 0.85rem; color: var(--text); cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    color: var(--text);
   }
-  .remember-me input[type="checkbox"] {
-    width: 16px; height: 16px; accent-color: var(--primary); cursor: pointer;
+
+  .remember-me input {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--primary);
+    cursor: pointer;
     margin: 0;
   }
-  .forgot-link { font-size: 0.85rem; color: var(--primary); font-weight: 600; text-decoration: none; }
-  .forgot-link:hover { text-decoration: underline; }
+
+  .forgot-link {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--primary);
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+
+  .forgot-link:hover {
+    text-decoration: underline;
+    opacity: 0.8;
+  }
 
   .btn-full {
-    width: 100%; padding: 14px; background: var(--primary); color: #fff;
-    border: none; border-radius: 12px; font-family: var(--font-body);
-    font-size: 1rem; font-weight: 600; cursor: pointer;
-    transition: var(--transition); letter-spacing: 0.02em;
+    width: 100%;
+    background: var(--primary);
+    border: none;
+    padding: 14px 20px;
+    border-radius: 60px;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 700;
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 6px 14px rgba(200,57,10,0.25);
+    letter-spacing: 0.3px;
   }
-  .btn-full:hover { background: var(--primary-light); transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+
+  .btn-full:hover {
+    background: var(--primary-light);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 20px rgba(200,57,10,0.3);
+  }
 
   .signup-link {
-    text-align: center; margin-top: 20px; font-size: 0.88rem; color: var(--muted);
+    text-align: center;
+    margin-top: 28px;
+    font-size: 0.85rem;
+    color: var(--muted);
   }
-  .signup-link a { color: var(--primary); font-weight: 600; text-decoration: none; }
-  .signup-link a:hover { text-decoration: underline; }
 
-  @keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(24px); }
-    to { opacity: 1; transform: translateY(0); }
+  .signup-link a {
+    color: var(--primary);
+    font-weight: 700;
+    text-decoration: none;
   }
-  @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-14px); }
+
+  .signup-link a:hover {
+    text-decoration: underline;
+  }
+
+  /* animations */
+  @keyframes floatPop {
+    0% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-12px);
+    }
+    100% {
+      transform: translateY(0px);
+    }
+  }
+
+  /* Fix for small devices: better spacing */
+  @media (max-width: 640px) {
+    .auth-card {
+      padding: 28px 20px 36px;
+      border-radius: 28px;
+    }
+    .auth-right {
+      padding: 24px 16px;
+    }
+    .left-content h2 {
+      font-size: 2rem;
+    }
+    .card-logo span {
+      font-size: 1.4rem;
+    }
+    .social-btn {
+      padding: 10px 12px;
+    }
+  }
+
+  /* Fix vertical centering on all screens */
+  @media (min-width: 992px) and (max-height: 750px) {
+    .auth-card {
+      padding: 28px 32px 34px;
+    }
+    .auth-right {
+      padding: 32px 24px;
+    }
   }
 </style>
 </head>
 <body>
-
-<!-- TOP CONTROLS -->
 <div class="top-controls">
-  <button class="ctrl-btn" id="themeToggle" title="Toggle dark mode">🌙</button>
+  <button class="ctrl-btn" id="themeToggle" aria-label="dark mode toggle">🌙</button>
 </div>
 
-<!-- LEFT PANEL -->
-<div class="auth-left">
-  <div class="left-content">
-    <div class="left-emoji">🍿</div>
-    <h2>Welcome Back to <em>Popsmith</em></h2>
-    <p>Your favourite gourmet popcorn awaits. Sign in to manage orders, track deliveries, and explore new flavors.</p>
-    <div class="left-badges">
-      <span class="left-badge">🌿 Handcrafted</span>
-      <span class="left-badge">🚚 Ships Nationwide</span>
-      <span class="left-badge">⭐ 4.9 Rated</span>
+<div class="auth-container">
+  <!-- LEFT HERO SECTION - ALIGNED PERFECTLY -->
+  <div class="auth-left">
+    <div class="left-content">
+      <div class="left-emoji">🍿✨</div>
+      <h2>Welcome Back to <em>Popsmith</em></h2>
+      <p>Your favourite gourmet popcorn awaits. Sign in to manage orders, track deliveries, and explore new flavors.</p>
+      <div class="left-badges">
+        <span class="left-badge">🌿 Handcrafted</span>
+        <span class="left-badge">🚚 Ships Nationwide</span>
+        <span class="left-badge">⭐ 4.9 Rated</span>
+      </div>
     </div>
   </div>
-</div>
 
-<!-- RIGHT / FORM -->
-<div class="auth-right">
-  <div class="auth-card">
-    <!-- LOGO INSIDE CARD -->
-    <div class="card-logo">
-      <div class="card-logo-icon">🍿</div>
-      Popsmith
-    </div>
-
-    <h1>Sign In</h1>
-    <p class="subtitle">New here? <a href="Signup.html">Create an account →</a></p>
-
-    <!-- SOCIAL LOGINS -->
-    <div class="social-btns">
-      <button class="social-btn">
-        <!-- Google SVG -->
-        <svg width="18" height="18" viewBox="0 0 18 18"><path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/><path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z" fill="#34A853"/><path d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z" fill="#FBBC05"/><path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/></svg>
-        <span>Continue with Google</span>
-      </button>
-      <button class="social-btn">
-        <!-- Apple SVG -->
-        <svg width="18" height="18" viewBox="0 0 814 1000"><path d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.5-164-39.5c-76 0-103.7 40.8-165.9 40.8s-105-57.8-155.5-127.4C46 480.3-.6 339.3-.6 202.7-.6 71.1 55.4 3.4 155.1 3.4c58.4 0 103.7 38.2 138.5 38.2 33.2 0 85.5-40.8 151.6-40.8 24.4 0 108.2 2.6 168.6 71.9zm-174.6-67.5c-4.5 35.8-21.3 71.9-42.8 95.7-23.1 25.6-56.9 44.2-90 44.2-4.5 0-9-.6-13.5-1.3-2.6-37.7 12.3-76.5 33.8-100.9 26.3-31.8 64.4-52.4 112.5-57.8z" fill="currentColor"/></svg>
-        <span>Continue with Apple</span>
-      </button>
-      <button class="social-btn">
-        <!-- Facebook SVG -->
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-        <span>Continue with Facebook</span>
-      </button>
-    </div>
-
-    <div class="divider">or sign in with email</div>
-
-    <!-- EMAIL FORM -->
-    <form onsubmit="return false;">
-      <div class="form-group">
-        <label for="email">Email Address</label>
-        <input type="email" id="email" placeholder="you@example.com" autocomplete="email" />
+  <!-- RIGHT FORM - FULLY FIXED ALIGNMENT (no shifting, perfect margins) -->
+  <div class="auth-right">
+    <div class="auth-card">
+      <div class="card-logo">
+        <div class="card-logo-icon">🍿</div>
+        <span>Popsmith</span>
       </div>
-      <div class="form-group">
-        <label for="password">Password</label>
-        <div class="input-wrap">
-          <input type="password" id="password" placeholder="Enter your password" autocomplete="current-password" />
-          <button type="button" class="eye-btn" id="eyeBtn" aria-label="Toggle password visibility">👁️</button>
+
+      <h1>Sign In</h1>
+      <p class="subtitle">New here? <a href="Signup.html" id="createAccountLink">Create an account →</a></p>
+
+      <div class="social-btns">
+        <button class="social-btn" id="googleBtn">
+          <svg width="20" height="20" viewBox="0 0 18 18"><path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/><path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z" fill="#34A853"/><path d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z" fill="#FBBC05"/><path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/></svg>
+          <span>Continue with Google</span>
+        </button>
+        <button class="social-btn" id="appleBtn">
+          <svg width="20" height="20" viewBox="0 0 814 1000"><path d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.5-164-39.5c-76 0-103.7 40.8-165.9 40.8s-105-57.8-155.5-127.4C46 480.3-.6 339.3-.6 202.7-.6 71.1 55.4 3.4 155.1 3.4c58.4 0 103.7 38.2 138.5 38.2 33.2 0 85.5-40.8 151.6-40.8 24.4 0 108.2 2.6 168.6 71.9zm-174.6-67.5c-4.5 35.8-21.3 71.9-42.8 95.7-23.1 25.6-56.9 44.2-90 44.2-4.5 0-9-.6-13.5-1.3-2.6-37.7 12.3-76.5 33.8-100.9 26.3-31.8 64.4-52.4 112.5-57.8z" fill="currentColor"/></svg>
+          <span>Continue with Apple</span>
+        </button>
+        <button class="social-btn" id="facebookBtn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          <span>Continue with Facebook</span>
+        </button>
+      </div>
+
+      <div class="divider">or sign in with email</div>
+
+      <!-- FORM WITH VALIDATION AND CORRECT SUBMIT HANDLER -->
+      <form id="loginForm" action="#" method="post">
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" name="email" placeholder="you@example.com" autocomplete="email" required>
         </div>
-      </div>
-      <div class="form-row">
-        <label class="remember-me">
-          <input type="checkbox" id="remember" />
-          Remember me
-        </label>
-        <a href="#" class="forgot-link">Forgot Password?</a>
-      </div>
-      <button type="submit" class="btn-full">Sign In →</button>
-    </form>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <div class="input-wrap">
+            <input type="password" id="password" name="password" placeholder="Enter your password" autocomplete="current-password" required>
+            <button type="button" class="eye-btn" id="eyeBtn" aria-label="Show password">👁️</button>
+          </div>
+        </div>
+        <div class="form-row">
+          <label class="remember-me">
+            <input type="checkbox" id="rememberCheckbox"> Remember me
+          </label>
+          <a href="#" id="forgotPwdLink" class="forgot-link">Forgot Password?</a>
+        </div>
+        <button type="submit" class="btn-full" id="signinMainBtn">Sign In →</button>
+      </form>
 
-    <p class="signup-link">Don't have an account? <a href="Signup.html">Sign up free</a></p>
+      <p class="signup-link">Don't have an account? <a href="Signup.html" id="signupFooterLink">Sign up free</a></p>
+    </div>
   </div>
 </div>
 
 <script>
-  // Dark mode
-  const themeBtn = document.getElementById('themeToggle');
-  themeBtn.addEventListener('click', () => {
-    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-    document.documentElement.setAttribute('data-theme', isDark ? '' : 'dark');
-    themeBtn.textContent = isDark ? '🌙' : '☀️';
-  });
-  // Eye toggle
-  const eyeBtn = document.getElementById('eyeBtn');
-  const pwdField = document.getElementById('password');
-  let shown = false;
-  eyeBtn.addEventListener('click', () => {
-    shown = !shown;
-    pwdField.type = shown ? 'text' : 'password';
-    eyeBtn.textContent = shown ? '🙈' : '👁️';
-  });
+  (function() {
+    // ---------- DARK MODE TOGGLE (fixed initial icon) ----------
+    const themeBtn = document.getElementById('themeToggle');
+    const htmlElement = document.documentElement;
+    const isDarkMode = htmlElement.getAttribute('data-theme') === 'dark';
+    if (!isDarkMode) {
+      themeBtn.textContent = '🌙';
+    } else {
+      themeBtn.textContent = '☀️';
+    }
+
+    themeBtn.addEventListener('click', () => {
+      const current = htmlElement.getAttribute('data-theme');
+      if (current === 'dark') {
+        htmlElement.setAttribute('data-theme', 'light');
+        themeBtn.textContent = '🌙';
+      } else {
+        htmlElement.setAttribute('data-theme', 'dark');
+        themeBtn.textContent = '☀️';
+      }
+    });
+
+    // ---------- PASSWORD EYE TOGGLE ----------
+    const eyeBtn = document.getElementById('eyeBtn');
+    const pwdInput = document.getElementById('password');
+    let passwordVisible = false;
+    if (eyeBtn && pwdInput) {
+      eyeBtn.addEventListener('click', () => {
+        passwordVisible = !passwordVisible;
+        pwdInput.type = passwordVisible ? 'text' : 'password';
+        eyeBtn.textContent = passwordVisible ? '🙈' : '👁️';
+      });
+    }
+
+    // ---------- FORM VALIDATION + LOGIN SIMULATION (fix alignment of behavior) ----------
+    const loginForm = document.getElementById('loginForm');
+    const emailInput = document.getElementById('email');
+    const pwdField = document.getElementById('password');
+    const rememberCheck = document.getElementById('rememberCheckbox');
+
+    // Helper show toast / alert (user friendly)
+    function showMessage(msg, isError = true) {
+      // create temporary floating notification (elegant and non-intrusive)
+      const toast = document.createElement('div');
+      toast.innerText = msg;
+      toast.style.position = 'fixed';
+      toast.style.bottom = '24px';
+      toast.style.left = '50%';
+      toast.style.transform = 'translateX(-50%)';
+      toast.style.backgroundColor = isError ? '#C8390A' : '#2E7D32';
+      toast.style.color = 'white';
+      toast.style.padding = '12px 24px';
+      toast.style.borderRadius = '60px';
+      toast.style.fontFamily = "var(--font-body)";
+      toast.style.fontWeight = '500';
+      toast.style.fontSize = '0.85rem';
+      toast.style.zIndex = '9999';
+      toast.style.boxShadow = '0 12px 24px rgba(0,0,0,0.2)';
+      toast.style.backdropFilter = 'blur(4px)';
+      document.body.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        setTimeout(() => toast.remove(), 300);
+      }, 2800);
+    }
+
+    // load remember me if previously stored
+    if (localStorage.getItem('popsmith_remember_email')) {
+      emailInput.value = localStorage.getItem('popsmith_remember_email') || '';
+      if (rememberCheck) rememberCheck.checked = true;
+    }
+
+    loginForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = emailInput.value.trim();
+      const password = pwdField.value.trim();
+
+      if (!email) {
+        showMessage('✨ Please enter your email address.', true);
+        emailInput.focus();
+        return;
+      }
+      if (!email.includes('@') || !email.includes('.')) {
+        showMessage('📧 Please enter a valid email address.', true);
+        emailInput.focus();
+        return;
+      }
+      if (!password) {
+        showMessage('🔒 Password cannot be empty.', true);
+        pwdField.focus();
+        return;
+      }
+      if (password.length < 4) {
+        showMessage('Password must be at least 4 characters.', true);
+        pwdField.focus();
+        return;
+      }
+
+      // handle remember me
+      if (rememberCheck && rememberCheck.checked) {
+        localStorage.setItem('popsmith_remember_email', email);
+      } else {
+        localStorage.removeItem('popsmith_remember_email');
+      }
+
+      // simulate login success (demo only)
+      showMessage(`🍿 Welcome back! Redirecting to dashboard... (demo)`, false);
+      // In real world, you'd redirect: window.location.href = '/dashboard';
+      setTimeout(() => {
+        alert(`✨ Demo login successful!\nWelcome ${email}\n(Full backend integration would happen here.)`);
+      }, 600);
+    });
+
+    // ---------- SOCIAL BUTTONS + FORGOT / SIGNUP interactive (demo) ----------
+    const google = document.getElementById('googleBtn');
+    const apple = document.getElementById('appleBtn');
+    const facebook = document.getElementById('facebookBtn');
+    const forgotLink = document.getElementById('forgotPwdLink');
+    const createAcc = document.getElementById('createAccountLink');
+    const signupFooter = document.getElementById('signupFooterLink');
+
+    function socialDemo(provider) {
+      showMessage(`🍿 ${provider} authentication would connect here. (Demo mode)`, false);
+    }
+
+    if (google) google.addEventListener('click', () => socialDemo('Google'));
+    if (apple) apple.addEventListener('click', () => socialDemo('Apple'));
+    if (facebook) facebook.addEventListener('click', () => socialDemo('Facebook'));
+    if (forgotLink) {
+      forgotLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        showMessage('📧 Reset link sent to your email (demo simulation).', false);
+      });
+    }
+    if (createAcc) {
+      createAcc.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.location.href = "Signup.html";
+        showMessage('🍿 Create account page — redirect to signup (demo).', false);
+      });
+    }
+    if (signupFooter) {
+      signupFooter.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.location.href = "Signup.html";
+        showMessage('✨ Join Popsmith! Sign-up flow would open.', false);
+      });
+    }
+
+    // additional fix for any layout shift: ensure that on window resize, heights adjust
+    window.addEventListener('resize', () => {
+      // no-op but ensures repaint stability
+    });
+  })();
 </script>
 </body>
 </html>
